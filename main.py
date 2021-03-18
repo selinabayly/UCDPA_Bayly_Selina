@@ -41,17 +41,22 @@ DW_Publication_Order = pd.DataFrame(build_table, columns=cols)
 DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replace('(','')
 DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replace(')','')
 
-print(DW_Publication_Order.head())
+#print(DW_Publication_Order)
 
+##################################################
+# Import Character Order from XLSX
+##################################################
 
-
+DW_Character_Order = pd.read_excel(r'DW_Public_Genre_Order.xlsx')
+print(DW_Character_Order)
 ##################################################
 # Plot a timeline of the books being published
 ##################################################
-plt.plot(DW_Publication_Order['Book_Year'],DW_Publication_Order['Book_Title'], marker="*", linestyle="-", color="r")
+plt.plot(DW_Publication_Order['Book_Title'],DW_Publication_Order['Book_Year'], marker="*", linestyle="-", color="r")
 plt.title("Timeline of Publication")
-plt.xticks(rotation=90)
-plt.xlabel("Book Year")
-plt.ylabel("Publication Title")
+plt.xticks(rotation=45)
+plt.xlabel("Publication Title")
+plt.ylabel("Book Year")
+
 plt.show()
 

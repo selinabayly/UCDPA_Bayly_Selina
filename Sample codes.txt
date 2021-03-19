@@ -1,0 +1,34 @@
+Get unique values of a column
+-------------------------------
+
+pd.value_counts(df.Account_Type)
+
+s = pd.value_counts(df.Account_Type)
+s1 = pd.Series({'nunique':len(s),'unique values': s.index.tolist()})
+s.append(s1)
+
+len(set(data_set))
+data_set.count(value)
+
+df['Account_Type'].unique()
+
+len(df['Account_Type'].unique())
+
+
+Check data integrity
+---------------------
+merge_DW = pd.merge (dw1,dw2,how='inner',on='id')
+
+for i in range(database):
+	i
+
+
+Get multiple line graphs 
+-------------------------
+x1 = data['book title']
+x2 = 
+
+
+
+The Amazing Maurice and His Educated Rodents
+The Amazing Maurice and His Educated Rodents 

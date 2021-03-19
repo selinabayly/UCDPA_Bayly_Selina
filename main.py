@@ -56,16 +56,19 @@ DW_Character_Order = pd.read_excel(r'DW_Public_Genre_Order.xlsx')
 ##################################################
 
 # Check number of columns in the two tables = 41
-print(DW_Publication_Order.shape)
-print(DW_Publication_Order.columns)
-print(DW_Character_Order.shape)
-print(DW_Character_Order.columns)
+# Showing shape, columns and data types
+print('DW_Publication_Order shape: ',DW_Publication_Order.shape)
+print('DW_Publication_Order dtypes: ',DW_Publication_Order.dtypes)
+print('DW_Character_Order shape: ',DW_Character_Order.shape)
+print('DW_Character_Order dtypes: ',DW_Character_Order.dtypes)
+# Convert Book Year to numeric to make it easier for comparison and making bins on graphs
+DW_Publication_Order['Book_Year'] = DW_Publication_Order.Book_Year.astype('int64')
+print('DW_Character_Order dtypes: ',DW_Publication_Order.dtypes)
 
 # Merge the tables and compare columns
 DW_Orders_Merge = pd.merge(DW_Publication_Order,DW_Character_Order,how='inner',left_on = 'Book_Id',right_on = 'DW_ID')
-print(DW_Orders_Merge.shape)
-print(DW_Orders_Merge.columns)
-print(DW_Orders_Merge.dtypes) # find out year / publication_date
+print('DW_Orders_Merge shape:',DW_Orders_Merge.shape)
+print('DW_Orders_Merge dtypes:',DW_Orders_Merge.dtypes)
 
 # Check title names
 for i in DW_Orders_Merge.itertuples():
@@ -74,7 +77,7 @@ for i in DW_Orders_Merge.itertuples():
 
 # Check publication year
 for i in DW_Orders_Merge.itertuples():
-    if str(i[3]) != str(i[10]):
+    if i[3] != i[10]:
         print('Year ',i[0],' (',i[3],') not equal (',i[10],')')
 
 # Result:
@@ -82,27 +85,53 @@ for i in DW_Orders_Merge.itertuples():
 # Year  36  ( 2007 ) not equal ( 2009 )
 # Having checked online, 2009 is correct, so need to replace date on Merge and Publication Order
 #DW_Publication_Order('Book_Year')[36] = '2009'
-DW_Orders_Merge.at[36,'Book_Year'] = '2009'
-DW_Publication_Order.loc[36,'Book_Year'] = '2009'
+
+DW_Orders_Merge.at[36,'Book_Year'] = 2009
+DW_Publication_Order.loc[36,'Book_Year'] = 2009
 
 # Check publication year
 print('Recheck whether years match')
 
 for i in DW_Orders_Merge.itertuples():
-    if str(i[3]) != str(i[10]):
+    if i[3] != i[10]:
         print('Year ',i[0],' (',i[3],') not equal (',i[10],')')
 
 ##################################################
-# Plot a timeline of the books being published
+# Plot a timeline of all the books being published
 ##################################################
+x = DW_Orders_Merge['Book_Year']
+y = DW_Orders_Merge['Short_Title']
 
 # Plot the line graph
-plt.plot(DW_Orders_Merge['Short_Title'],DW_Orders_Merge['Book_Year'], marker="*", linestyle="-", color="r")
+#plt.ioff()
+#plt.figure(figsize = (15,10))
+plt.figure('Timeline of Publication',figsize = (10,10))
+plt.plot(x, y, marker="o", linestyle="-", color="b")
 plt.title('Timeline of Publication')
-plt.xticks(rotation=90)
-plt.xlabel("Book Title")
-plt.ylabel("Publication Year")
+plt.xticks(rotation=45)
+plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+plt.xlabel("Publication Year")
+plt.ylabel("Book Title")
+
+################################################################
+# Plot a timeline of all the books being published by character
+################################################################
+print ('All the Genres')
+print (pd.value_counts(DW_Orders_Merge.Genre))
+
+x = DW_Orders_Merge['Book_Year']
+y = DW_Orders_Merge['Short_Title']
+
+# Plot the line graph
+#plt.ioff()
+#plt.figure(figsize = (15,10))
+plt.figure('Timeline of Publication 2',figsize = (10,10))
+plt.plot(x, y, marker="o", linestyle="-", color="b")
+plt.title('Timeline of Publication')
+plt.xticks(rotation=45)
+plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+plt.xlabel("Publication Year")
+plt.ylabel("Book Title")
+
 
 plt.show()
-
-

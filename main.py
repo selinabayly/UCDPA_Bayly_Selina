@@ -117,7 +117,7 @@ plt.tight_layout()
 plt.xlabel("Publication Year")
 plt.ylabel("Book Title")
 
-plt.show()
+#plt.show()
 
 ################################################################
 # Plot a timeline of all the books being published by character
@@ -156,21 +156,50 @@ y2_Dh = DW_Orders_Merge_Dh['Display_Title']
 y2_TA = DW_Orders_Merge_TA['Display_Title']
 y2_ML = DW_Orders_Merge_ML['Display_Title']
 
-
 # Plot the line graph
 plt.figure('Timeline of Publication for Characters', figsize=(12, 10))
+
 plt.plot(x2_CW, y2_CW, marker="o", linestyle="-", color="b", label='City Watch')
 plt.plot(x2_Wd, y2_Wd, marker="o", linestyle="-", color="r", label='Wizards')
 plt.plot(x2_Wh, y2_Wh, marker="o", linestyle="-", color="g", label='Witches')
 plt.plot(x2_Se, y2_Se, marker="o", linestyle="-", color="c", label='Standalone')
 plt.plot(x2_Dh, y2_Dh, marker="o", linestyle="-", color="m", label='Death')
 plt.plot(x2_TA, y2_TA, marker="o", linestyle="-", color="y", label='Tiffany Aching')
-plt.plot(x2_ML, y2_ML, marker="o", linestyle="-", color="k", label='Moist Van Lipwig')
+plt.plot(x2_ML, y2_ML, marker="o", linestyle="-", color="brown", label='Moist Van Lipwig')
+
 plt.title('Timeline of Publication for Characters')
 plt.xticks(rotation=45)
 plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
 plt.tight_layout()
-plt.xlabel("Publication Year")
-plt.ylabel("Book Title")
+plt.xlabel("Publication Year", fontsize=16)
+plt.ylabel("Book Title", fontsize=16)
 plt.legend()
+
+plt.show()
+
+################################################################
+# Plot a timeline of all the books being published by character
+# Adding full series to try and she character/genre crossover
+################################################################
+
+# Plot the line graph
+plt.figure('Timeline of Publication for Characters including Full Series', figsize=(12, 10))
+
+plt.plot(x1, y1, marker="o", linestyle="-", color="k",label='Full Series')
+plt.plot(x2_CW, y2_CW, marker="o", linestyle="-", color="b", label='City Watch')
+plt.plot(x2_Wd, y2_Wd, marker="o", linestyle="-", color="r", label='Wizards')
+plt.plot(x2_Wh, y2_Wh, marker="o", linestyle="-", color="g", label='Witches')
+plt.plot(x2_Se, y2_Se, marker="o", linestyle="-", color="c", label='Standalone')
+plt.plot(x2_Dh, y2_Dh, marker="o", linestyle="-", color="m", label='Death')
+plt.plot(x2_TA, y2_TA, marker="o", linestyle="-", color="y", label='Tiffany Aching')
+plt.plot(x2_ML, y2_ML, marker="o", linestyle="-", color="brown", label='Moist Van Lipwig')
+
+plt.title('Timeline of Publication for Characters including Full Series')
+plt.xticks(rotation=45)
+plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.tight_layout()
+plt.xlabel("Publication Year", fontsize=16)
+plt.ylabel("Book Title", fontsize=16)
+plt.legend()
+
 plt.show()

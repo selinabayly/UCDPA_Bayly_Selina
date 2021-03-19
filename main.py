@@ -99,39 +99,46 @@ for i in DW_Orders_Merge.itertuples():
 ##################################################
 # Plot a timeline of all the books being published
 ##################################################
-x = DW_Orders_Merge['Book_Year']
-y = DW_Orders_Merge['Short_Title']
+x1 = DW_Orders_Merge['Book_Year']
+y1 = DW_Orders_Merge['Short_Title']
 
 # Plot the line graph
-#plt.ioff()
-#plt.figure(figsize = (15,10))
-plt.figure('Timeline of Publication',figsize = (10,10))
-plt.plot(x, y, marker="o", linestyle="-", color="b")
-plt.title('Timeline of Publication')
+plt.figure('Timeline of Publication',figsize = (10,12))
+plt.plot(x1, y1, marker="o", linestyle="-", color="b")
+plt.title('Timeline of Publication of Full Series')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
 plt.xlabel("Publication Year")
 plt.ylabel("Book Title")
 
+plt.show()
+#plt.clf()
 ################################################################
 # Plot a timeline of all the books being published by character
 ################################################################
 print ('All the Genres')
 print (pd.value_counts(DW_Orders_Merge.Genre))
 
-x = DW_Orders_Merge['Book_Year']
-y = DW_Orders_Merge['Short_Title']
+x2 = DW_Orders_Merge['Book_Year']
+y2a = DW_Orders_Merge['Short_Title']
+#y2a = DW_Orders_Merge.loc[(DW_Orders_Merge["Genre"] == 'The Witches')]
+#print(y2a)
+#y2a = DW_Orders_Merge(DW_Orders_Merge['Genre']=='The Wizards/Rincewind')
+y2b = DW_Orders_Merge[DW_Orders_Merge['Genre']=='The City Watch']
+y2c = DW_Orders_Merge[DW_Orders_Merge['Genre']=='The Witches']
+y2d = DW_Orders_Merge[DW_Orders_Merge['Genre']=='Standalone']
+y2e = DW_Orders_Merge[DW_Orders_Merge['Genre']=='Death']
+y2f = DW_Orders_Merge[DW_Orders_Merge['Genre']=='Tiffany Aching & the Nac Mac Feegles']
 
 # Plot the line graph
-#plt.ioff()
-#plt.figure(figsize = (15,10))
-plt.figure('Timeline of Publication 2',figsize = (10,10))
-plt.plot(x, y, marker="o", linestyle="-", color="b")
-plt.title('Timeline of Publication')
+#fig, ToPC = plt.subplot()
+plt.figure('Timeline of Publication for Characters',figsize = (10,12))
+plt.plot(x2, y2a, marker="o", linestyle="-", color="b", label='The Wizards')
+#plt.plot(x2, y2b, marker="o", linestyle="-", color="r", label='The City Watch')
+plt.title('Timeline of Publication for Characters')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x), max(x)+1, 1.0))
+plt.xticks(np.arange(min(x2), max(x2)+1, 1.0))
 plt.xlabel("Publication Year")
 plt.ylabel("Book Title")
-
 
 plt.show()

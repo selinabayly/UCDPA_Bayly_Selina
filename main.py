@@ -44,8 +44,6 @@ DW_Publication_Order = pd.DataFrame(build_table, columns=cols)
 DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replace('(','')
 DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replace(')','')
 
-print(DW_Publication_Order.head())
-
 ##################################################
 # Import Character Order from XLSX
 ##################################################
@@ -97,11 +95,13 @@ for i in DW_Orders_Merge.itertuples():
 ##################################################
 # Plot a timeline of the books being published
 ##################################################
+
+# Plot the line graph
 plt.plot(DW_Orders_Merge['Short_Title'],DW_Orders_Merge['Book_Year'], marker="*", linestyle="-", color="r")
-plt.title("Timeline of Publication")
-plt.xticks(rotation=45)
-plt.xlabel("Publication Title")
-plt.ylabel("Book Year")
+plt.title('Timeline of Publication')
+plt.xticks(rotation=90)
+plt.xlabel("Book Title")
+plt.ylabel("Publication Year")
 
 plt.show()
 

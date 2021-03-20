@@ -119,8 +119,6 @@ plt.tight_layout()
 plt.xlabel("Publication Year")
 plt.ylabel("Book Title")
 
-#plt.show()
-
 ################################################################
 # Plot a timeline of all the books being published by character
 ################################################################
@@ -177,8 +175,6 @@ plt.xlabel("Publication Year", fontsize=16)
 plt.ylabel("Book Title", fontsize=16)
 plt.legend()
 
-plt.show()
-
 ################################################################
 # Plot a timeline of all the books being published by character
 # Adding full series to try and she character/genre crossover
@@ -187,7 +183,7 @@ plt.show()
 # Plot the line graph
 plt.figure('Timeline of Publication for Characters including Full Series', figsize=(12, 10))
 
-plt.plot(x1, y1, marker="o", linestyle="-", color="k",label='Full Series')
+plt.plot(x1, y1, marker="o", linestyle="-", color="k", label='Full Series')
 plt.plot(x2_CW, y2_CW, marker="o", linestyle="-", color="b", label='City Watch')
 plt.plot(x2_Wd, y2_Wd, marker="o", linestyle="-", color="r", label='Wizards')
 plt.plot(x2_Wh, y2_Wh, marker="o", linestyle="-", color="g", label='Witches')
@@ -204,4 +200,31 @@ plt.xlabel("Publication Year", fontsize=16)
 plt.ylabel("Book Title", fontsize=16)
 plt.legend()
 
+################################################################
+# Create the previous graph as a scatter instead of linear
+################################################################
+plt.figure('Timeline of Publication for Characters including Full Series - Scatter', figsize=(12, 10))
+
+plt.scatter(x1, y1, color='black', marker='o', alpha=0.5, label='Full Series')
+plt.scatter(x2_CW, y2_CW, color='blue', marker="o", alpha=0.5, label='City Watch')
+plt.scatter(x2_Wd, y2_Wd, color='green', marker="o", alpha=0.5, label='Wizards')
+plt.scatter(x2_Wh, y2_Wh, color='red', marker="o", alpha=0.5, label='Witches')
+plt.scatter(x2_Se, y2_Se, color='yellow', marker="o", alpha=0.5, label='Standalone')
+plt.scatter(x2_Dh, y2_Dh, color='purple', marker="o", alpha=0.5, label='Death')
+plt.scatter(x2_TA, y2_TA, color='cyan', marker="o", alpha=0.5, label='Tiffany Aching')
+plt.scatter(x2_ML, y2_ML, color='brown', marker="o", alpha=0.5, label='Moist Van Lipwig')
+
+plt.title('Timeline of Publication for Characters including Full Series')
+plt.xticks(rotation=45)
+plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.tight_layout()
+plt.xlabel("Publication Year", fontsize=16)
+plt.ylabel("Book Title", fontsize=16)
+plt.legend()
+
 plt.show()
+
+################################################################
+# Plot a timeline of all the books being published by character
+# Adding full series to try and she character/genre crossover
+################################################################

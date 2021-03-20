@@ -48,7 +48,7 @@ DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replac
 # Import Character Order from XLSX
 ##################################################
 
-DW_Character_Order = pd.read_excel(r'DW_Public_Genre_Order.xlsx')
+DW_Character_Order = pd.read_csv(r'DW_Public_Genre_Order.csv')
 
 ##################################################
 # Do data checks between two DW dataframes

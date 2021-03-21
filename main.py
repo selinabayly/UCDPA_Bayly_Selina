@@ -1,3 +1,4 @@
+
 # Certificate in Data Analytics - UCD
 # Selina Bayly March 2021
 
@@ -239,9 +240,12 @@ print(book_data_kaggle.iloc[:5, [0, 9]])
 print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
 print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
+# Merge Kaggle dataset with characters dataset to see if the dataset
+# all the books on it.
 book_data_kaggle_join = pd.merge(DW_Orders_Merge, book_data_kaggle,
                                  how='inner', left_on=('Book_Title', 'Author'),
                                  right_on=('book_title', 'book_authors'))
+# Check index etc.
 print('book_data_kaggle_join - dtypes, shape, head, index')
 print(book_data_kaggle_join.dtypes)
 print(book_data_kaggle_join.shape)
@@ -249,10 +253,28 @@ print(book_data_kaggle_join.head())
 print(book_data_kaggle_join.index)
 print('')
 print(book_data_kaggle_join.iloc[:5, [1, 4, 5, 15, 24]])
+
+# Set index to author and extract based on Terry Pratchett
 book_data_kaggle_join.set_index('Author', inplace=True)
 print(book_data_kaggle_join.index)
 
-print(book_data_kaggle_join.loc[['Terry Pratchett']])
+book_data_kaggle_TP = book_data_kaggle_join.loc[['Terry Pratchett']]
+print(book_data_kaggle_TP.head())
 
+# Check for missing data
+print(book_data_kaggle_TP.isnull().sum())
+
+# Only NaN's on dataframe re book_edition and book_isbn, which are not required.
+# Can now check data for only columns that are of interest
+
+book_data_kaggle_TP_subset = book_data_kaggle_TP.iloc[:, [7, 1, 9, 11, 12, 13, 19, 20, 21, 22]]
+print('kaggle subset data type and shape')
+print(book_data_kaggle_TP_subset.dtypes)
+print(book_data_kaggle_TP_subset.shape)
+
+# Change index to book order and then sort
+#book_data_kaggle_TP_subset.set_index('Order', inplace=True)
+#book_data_kaggle_TP_subset.sort()
+print(book_data_kaggle_TP_subset)
 # plt.show()
 # end

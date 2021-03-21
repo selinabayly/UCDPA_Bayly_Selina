@@ -1,4 +1,3 @@
-
 # Certificate in Data Analytics - UCD
 # Selina Bayly March 2021
 
@@ -50,7 +49,7 @@ DW_Publication_Order['Book_Year'] = DW_Publication_Order['Book_Year'].str.replac
 # For transportability of code, changing to CSV
 ##################################################
 
-DW_Character_Order = pd.read_csv(r'DW_Public_Genre_Order.csv')
+DW_Character_Order = pd.read_csv(r'DW_Public_Character_Order.csv')
 
 ##################################################
 # Do data checks between two DW dataframes
@@ -114,7 +113,7 @@ plt.figure('Timeline of Publication', figsize=(12, 10))
 plt.plot(x1, y1, marker="o", linestyle="-", color="b")
 plt.title('Timeline of Publication of Full Series')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
 plt.tight_layout()
 plt.xlabel("Publication Year")
 plt.ylabel("Book Title")
@@ -123,53 +122,44 @@ plt.ylabel("Book Title")
 # Plot a timeline of all the books being published by character
 ################################################################
 
-# Find out how many Characters (Genres) there are
-print('All the Genres')
+# Find out how many Characters there are
+print('All the Characters')
 
 # Print out the Characters so that we can extract each to its own dataframe
-print(pd.value_counts(DW_Orders_Merge.Genre))
+print(pd.value_counts(DW_Orders_Merge.Character))
 
-# Create the dataframes
-DW_Orders_Merge_CW = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'The City Watch']
-DW_Orders_Merge_Wd = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'The Wizards/Rincewind']
-DW_Orders_Merge_Wh = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'The Witches']
-DW_Orders_Merge_Se = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'Standalone']
-DW_Orders_Merge_Dh = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'Death']
-DW_Orders_Merge_TA = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'Tiffany Aching & the Nac Mac Feegles']
-DW_Orders_Merge_ML = DW_Orders_Merge[DW_Orders_Merge['Genre'] == 'Moist Van Lipwig']
+# Save Characters, Colour and Label to list]
+DW_Character_List = DW_Orders_Merge[['Character', 'Colour', 'Label']].value_counts().index[:].tolist()
+print(DW_Character_List)
 
-# Get all the x-axes
-x2_CW = DW_Orders_Merge_CW['Book_Year']
-x2_Wd = DW_Orders_Merge_Wd['Book_Year']
-x2_Wh = DW_Orders_Merge_Wh['Book_Year']
-x2_Se = DW_Orders_Merge_Se['Book_Year']
-x2_Dh = DW_Orders_Merge_Dh['Book_Year']
-x2_TA = DW_Orders_Merge_TA['Book_Year']
-x2_ML = DW_Orders_Merge_ML['Book_Year']
+# Create function to create dataframes for Character
+def create_dw_orders_merge(l_character):
+    return_dataframe = DW_Orders_Merge[DW_Orders_Merge['Character'] == l_character]
+    return return_dataframe
 
-# Get all the y-axes
-y2_CW = DW_Orders_Merge_CW['Display_Title']
-y2_Wd = DW_Orders_Merge_Wd['Display_Title']
-y2_Wh = DW_Orders_Merge_Wh['Display_Title']
-y2_Se = DW_Orders_Merge_Se['Display_Title']
-y2_Dh = DW_Orders_Merge_Dh['Display_Title']
-y2_TA = DW_Orders_Merge_TA['Display_Title']
-y2_ML = DW_Orders_Merge_ML['Display_Title']
+
+# Create the dataframes - subset to character and store in array
+DW_Orders_Merge_Characters = {}
+DW_Orders_Merge_Characters_x = {}
+DW_Orders_Merge_Characters_y = {}
+
+# Set up the subsets of data and the x and y axes
+for i in range(len(DW_Character_List)):
+    DW_Orders_Merge_Characters[i] = create_dw_orders_merge(DW_Character_List[i][0])
+    DW_Orders_Merge_Characters_x[i] = DW_Orders_Merge_Characters[i]['Book_Year']
+    DW_Orders_Merge_Characters_y[i] = DW_Orders_Merge_Characters[i]['Display_Title']
 
 # Plot the line graph
 plt.figure('Timeline of Publication for Characters', figsize=(12, 10))
 
-plt.plot(x2_CW, y2_CW, marker="o", linestyle="-", color="b", label='City Watch')
-plt.plot(x2_Wd, y2_Wd, marker="o", linestyle="-", color="r", label='Wizards')
-plt.plot(x2_Wh, y2_Wh, marker="o", linestyle="-", color="g", label='Witches')
-plt.plot(x2_Se, y2_Se, marker="o", linestyle="-", color="c", label='Standalone')
-plt.plot(x2_Dh, y2_Dh, marker="o", linestyle="-", color="m", label='Death')
-plt.plot(x2_TA, y2_TA, marker="o", linestyle="-", color="y", label='Tiffany Aching')
-plt.plot(x2_ML, y2_ML, marker="o", linestyle="-", color="brown", label='Moist Van Lipwig')
+for i in range(len(DW_Character_List)):
+    plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
+             marker="o", linestyle="-", color=DW_Character_List[i][1],
+             label=DW_Character_List[i][2])
 
 plt.title('Timeline of Publication for Characters')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
 plt.tight_layout()
 plt.xlabel("Publication Year", fontsize=16)
 plt.ylabel("Book Title", fontsize=16)
@@ -177,24 +167,22 @@ plt.legend()
 
 ################################################################
 # Plot a timeline of all the books being published by character
-# Adding full series to try and she character/genre crossover
+# Adding full series to try and see character crossover
 ################################################################
 
 # Plot the line graph
 plt.figure('Timeline of Publication for Characters including Full Series', figsize=(12, 10))
 
-plt.plot(x1, y1, marker="o", linestyle="-", color="k", label='Full Series')
-plt.plot(x2_CW, y2_CW, marker="o", linestyle="-", color="b", label='City Watch')
-plt.plot(x2_Wd, y2_Wd, marker="o", linestyle="-", color="r", label='Wizards')
-plt.plot(x2_Wh, y2_Wh, marker="o", linestyle="-", color="g", label='Witches')
-plt.plot(x2_Se, y2_Se, marker="o", linestyle="-", color="c", label='Standalone')
-plt.plot(x2_Dh, y2_Dh, marker="o", linestyle="-", color="m", label='Death')
-plt.plot(x2_TA, y2_TA, marker="o", linestyle="-", color="y", label='Tiffany Aching')
-plt.plot(x2_ML, y2_ML, marker="o", linestyle="-", color="brown", label='Moist Van Lipwig')
+plt.plot(x1, y1, marker="o", linestyle="-", color="grey", label='Full Series')
+
+for i in range(len(DW_Character_List)):
+    plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
+             marker="o", linestyle="-", color=DW_Character_List[i][1],
+             label=DW_Character_List[i][2])
 
 plt.title('Timeline of Publication for Characters including Full Series')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
 plt.tight_layout()
 plt.xlabel("Publication Year", fontsize=16)
 plt.ylabel("Book Title", fontsize=16)
@@ -205,18 +193,16 @@ plt.legend()
 ################################################################
 plt.figure('Timeline of Publication for Characters including Full Series - Scatter', figsize=(12, 10))
 
-plt.scatter(x1, y1, color='black', marker='o', alpha=0.5, label='Full Series')
-plt.scatter(x2_CW, y2_CW, color='blue', marker="o", alpha=0.5, label='City Watch')
-plt.scatter(x2_Wd, y2_Wd, color='green', marker="o", alpha=0.5, label='Wizards')
-plt.scatter(x2_Wh, y2_Wh, color='red', marker="o", alpha=0.5, label='Witches')
-plt.scatter(x2_Se, y2_Se, color='yellow', marker="o", alpha=0.5, label='Standalone')
-plt.scatter(x2_Dh, y2_Dh, color='purple', marker="o", alpha=0.5, label='Death')
-plt.scatter(x2_TA, y2_TA, color='cyan', marker="o", alpha=0.5, label='Tiffany Aching')
-plt.scatter(x2_ML, y2_ML, color='brown', marker="o", alpha=0.5, label='Moist Van Lipwig')
+plt.scatter(x1, y1, color='grey', marker='o', alpha=0.5, label='Full Series')
+for i in range(len(DW_Character_List)):
+    plt.scatter(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
+                alpha=0.5,
+                color=DW_Character_List[i][1],
+                label=DW_Character_List[i][2])
 
 plt.title('Timeline of Publication for Characters including Full Series')
 plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1)+1, 1.0))
+plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
 plt.tight_layout()
 plt.xlabel("Publication Year", fontsize=16)
 plt.ylabel("Book Title", fontsize=16)
@@ -226,5 +212,5 @@ plt.show()
 
 ################################################################
 # Plot a timeline of all the books being published by character
-# Adding full series to try and she character/genre crossover
+# Adding full series to try and she character crossover
 ################################################################

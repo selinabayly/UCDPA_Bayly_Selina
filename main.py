@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import urllib.request
 
-pd.options.display.max_columns = 10
+# pd.options.display.max_columns = 10
 ##################################################
 # Import Datasets
 ##################################################
@@ -256,10 +256,7 @@ print(book_data_kaggle_join.iloc[:5, [1, 4, 5, 15, 24]])
 
 # Set index to author and extract based on Terry Pratchett
 book_data_kaggle_join.set_index('Author', inplace=True)
-print(book_data_kaggle_join.index)
-
 book_data_kaggle_TP = book_data_kaggle_join.loc[['Terry Pratchett']]
-print(book_data_kaggle_TP.head())
 
 # Check for missing data
 print(book_data_kaggle_TP.isnull().sum())
@@ -268,13 +265,17 @@ print(book_data_kaggle_TP.isnull().sum())
 # Can now check data for only columns that are of interest
 
 book_data_kaggle_TP_subset = book_data_kaggle_TP.iloc[:, [7, 1, 9, 11, 12, 13, 19, 20, 21, 22]]
-print('kaggle subset data type and shape')
-print(book_data_kaggle_TP_subset.dtypes)
+print('After i-loc on kaggle_TP')
 print(book_data_kaggle_TP_subset.shape)
 
-# Change index to book order and then sort
-#book_data_kaggle_TP_subset.set_index('Order', inplace=True)
-#book_data_kaggle_TP_subset.sort()
-print(book_data_kaggle_TP_subset)
+# Index on Book_ID so that we can drop duplicates
+book_data_kaggle_TP_subset.set_index('Book_ID', inplace=True)
+
+# Drop Duplicates from dataset
+print('Drop Duplicates')
+book_data_kaggle_TP_subset.drop_duplicates(subset='Book_ID', keep=False, inplace=True)
+print(book_data_kaggle_TP_subset.shape)
+print(book_data_kaggle_TP_subset.head())
+
 # plt.show()
 # end

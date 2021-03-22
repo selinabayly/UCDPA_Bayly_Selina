@@ -232,6 +232,10 @@ plt.legend()
 # Review book_data_kaggle_subset
 ###################################################################
 
+print('######################################')
+print('# book_data_kaggle_subset')
+print('######################################')
+
 book_data_kaggle = pd.read_csv(r'book_data_kaggle_subset.csv')
 print('book_data_kaggle - dtypes and shape')
 print(book_data_kaggle.dtypes)
@@ -242,8 +246,8 @@ print(book_data_kaggle.shape)
 print(type(book_data_kaggle.iloc[:, [0, 9]]))
 print(book_data_kaggle.iloc[:5, [0, 9]])
 
-print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
-print(DW_Orders_Merge.iloc[:5, [1, 5]])
+# print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
+# print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
 # Merge Kaggle dataset with characters dataset to see if the dataset
 # all the books on it.
@@ -293,6 +297,10 @@ print(book_data_kaggle_join.head())
 # Second File books.csv
 ###################################################################
 
+print('######################################')
+print('# books')
+print('######################################')
+
 books = pd.read_csv(r'books.csv')
 
 # Note: 4 rows had an additional comma in the file.  Was saved as CSV
@@ -307,7 +315,7 @@ print(books.shape)
 
 print(books.iloc[:5, [1, 2]])
 
-print(DW_Orders_Merge.iloc[:5, [1, 5]])
+# print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
 # Merge books dataset with characters dataset to see if the dataset
 # all the books on it.
@@ -348,6 +356,10 @@ books_join = pd.merge(DW_Orders_Merge, books,
 # Third file Goodreads_TP_DW.csv
 ###################################################################
 
+print('######################################')
+print('# Goodreads_TP_DW')
+print('######################################')
+
 Goodreads_TP_DW = pd.read_csv(r'Goodreads_TP_DW.csv')
 print('')
 print('Goodreads_TP_DW - dtypes and shape')
@@ -359,8 +371,8 @@ print(Goodreads_TP_DW.shape)
 print(type(Goodreads_TP_DW.iloc[:, [2, 3]]))
 print(Goodreads_TP_DW.iloc[:5, [0, 9]])
 
-print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
-print(DW_Orders_Merge.iloc[:5, [1, 5]])
+# print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
+# print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
 # Merge Kaggle dataset with characters dataset to see if the dataset
 # all the books on it.
@@ -376,19 +388,21 @@ print(Goodreads_TP_DW_join)
 # Review second books.csv file - from Archive.zip, so renaming
 # archive_books.csv
 ###################################################################
+
+print('######################################')
+print('# archive_books')
+print('######################################')
+
 print('archive_books - dtypes and shape')
 
 archive_books = pd.read_csv(r'archive - books.csv')
 print(archive_books.dtypes)
 print(archive_books.shape)
 
-# Print subset of archive_books and see what type of structure it is
+# Print subset of datasets to be merged
+# print(archive_books.iloc[:5, [7, 9]])
 
-print(type(archive_books.iloc[:, [0, 9]]))
-print(archive_books.iloc[:5, [7, 9]])
-
-print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
-print(DW_Orders_Merge.iloc[:5, [1, 5]])
+# print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
 # Merge archive_books dataset with characters dataset to see if the dataset
 # all the books on it.
@@ -396,34 +410,77 @@ archive_books_join = pd.merge(DW_Orders_Merge, archive_books,
                               how='inner', left_on=('Book_Title', 'Author'),
                               right_on=('original_title', 'authors'))
 
-# Missing books: The Last Hero and Amazing Maurice - these will have to be found and edited
+print('Missing Data? - DW_Orders_Merge:', len(DW_Orders_Merge),
+      'archive_books_join:', len(archive_books_join),
+      'Missing:', len(DW_Orders_Merge)-len(archive_books_join))
 
-# Check index etc.
-print('archive_books_join - dtypes, shape, head, index')
-print(archive_books_join.dtypes)
-print(archive_books_join.shape)
-print(archive_books_join.head())
+# Find out which books are missing by doing outer join between merged file
+# (missing 2) and DW_Orders_Merge
+check_for_missing_books = pd.merge(DW_Orders_Merge, archive_books_join,
+                                   how='outer', on=('Book_Title', 'Author'))
+NaN_columns = check_for_missing_books.columns[check_for_missing_books.isna().any()].to_list()
+# print('Columns missing data',NaN_columns)
+
+# Find the missing books based on the title and author - the keys used for the merge
+missing_books = check_for_missing_books[check_for_missing_books['original_title'].isna()]
+print('Missing books are:')
+print(missing_books.iloc[:, [1, 5]])
+
+# Try and find these books on archive_books - checked in CSV file for confirmation
+books_found = archive_books.isin([missing_books.iloc[0, 5], missing_books.iloc[1, 5]])
+print('archive')
+print(archive_books.iloc[[4564, 5098], [7, 9]])
+print('found')
+print(books_found.iloc[[4564, 5098], [7, 9]])
+
+# The Last Hero matched, but is joint authorship so didn't show up.  Amazing Maurice has a
+# space at the end, so it didn't show up.  If I add the space, it will.
+books_found = archive_books.isin(['The Last Hero', 'The Amazing Maurice and His Educated Rodents '])
+print('archive')
+print(archive_books.iloc[[4564, 5098], [7, 9]])
+print('found')
+print(books_found.iloc[[4564, 5098], [7, 9]])
+
+# As I couldn't find both and need to add them, I chose to use a different option for finding the
+# missing records.
+match1 = archive_books.loc[archive_books.original_title.str.contains('The Last Hero', na=False)]
+match2 = archive_books.loc[archive_books.original_title.str.contains('Amazing Maurice', na=False)]
+print('match1')
+print(match1.iloc[:, [0, 1, 7, 9]], match1.index)
+print('match2')
+print(match2.iloc[:, [0, 1, 7, 9]], match2.index)
 print('')
 
-# Check for missing data
-print('archive_books missing data?')
-print(archive_books_join.isnull().sum())
+# As both missing records are to be found, they need to be updated so that they'll match
+#                          #authors                                 original_title
+# 4564              Terry Pratchett  The Amazing Maurice and His Educated Rodents  - update original title
+# 5098  Terry Pratchett, Paul Kidby                                  The Last Hero - update author
 
-# Only NaN's on dataframe are isbn, isbn13, and language code, which are not required.
-# Can now check data for only columns that are of interest.
+# Update 4564 authors with Author from DW_Orders_Merge
+archive_books.at[match2.iloc[0, 0]-1, 'original_title'] = missing_books.iloc[1, 1]
 
-# Drop Duplicates from dataset
-print('archive_books join')
-print(DW_Orders_Merge.iloc[5:, [1, 5]])
-print(archive_books_join.iloc[5:, [1, 8]])
-print('Drop Duplicates')
-archive_books_join.drop_duplicates(subset='Book_Title', keep=False, inplace=True)
-print(archive_books_join.shape)
+# Update 5098 original_title with Book_Title from DW_Orders_Merge
+archive_books.at[match1.iloc[0, 0]-1, 'authors'] = missing_books.iloc[0, 5]
 
-# print(archive_books_join.iloc[:5, [0, 1, 4, 5, 7, 10, 11, 12, 13, 14, 15, 18, 22, 36-34]])
-# DW_Orders_Merge.at[36, 'Book_Year'] = 2009 - change titles
-# "The Amazing Maurice and His Educated Rodents " 4565
-# "Terry Pratchett, Paul Kidby" 5099
+# Merge the files again and check how many rows.  Should now be 41
+
+archive_books_join = pd.merge(DW_Orders_Merge, archive_books,
+                              how='inner', left_on=('Book_Title', 'Author'),
+                              right_on=('original_title', 'authors'))
+
+print('Missing Data? - DW_Orders_Merge:', len(DW_Orders_Merge),
+      'archive_books_join:', len(archive_books_join),
+      'Missing:', len(DW_Orders_Merge)-len(archive_books_join))
+
+#############################################################################
+# Analyse Data in archive_books_join
+#############################################################################
+
+print('########################################')
+print('# Data Analysis of archive_books_join')
+print('# Using archive_books join and possibly ')
+print('# DW_Orders_Merge for crosschecking')
+print('########################################')
 
 # plt.show()
 # end

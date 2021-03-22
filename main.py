@@ -422,6 +422,8 @@ print(archive_books_join.shape)
 
 # print(archive_books_join.iloc[:5, [0, 1, 4, 5, 7, 10, 11, 12, 13, 14, 15, 18, 22, 36-34]])
 # DW_Orders_Merge.at[36, 'Book_Year'] = 2009 - change titles
+# "The Amazing Maurice and His Educated Rodents " 4565
+# "Terry Pratchett, Paul Kidby" 5099
 
 # plt.show()
 # end

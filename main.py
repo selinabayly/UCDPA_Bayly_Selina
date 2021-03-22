@@ -228,6 +228,66 @@ plt.legend()
 # Review other files to see which ones will give the best results.
 ###################################################################
 
+###################################################################
+# Review book_data_kaggle_subset
+###################################################################
+
+book_data_kaggle = pd.read_csv(r'book_data_kaggle_subset.csv')
+print('book_data_kaggle - dtypes and shape')
+print(book_data_kaggle.dtypes)
+print(book_data_kaggle.shape)
+
+# Print subset of book_data_kaggle and see what type of structure it is
+
+print(type(book_data_kaggle.iloc[:, [0, 9]]))
+print(book_data_kaggle.iloc[:5, [0, 9]])
+
+print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
+print(DW_Orders_Merge.iloc[:5, [1, 5]])
+
+# Merge Kaggle dataset with characters dataset to see if the dataset
+# all the books on it.
+book_data_kaggle_join = pd.merge(DW_Orders_Merge, book_data_kaggle,
+                                 how='inner', left_on=('Book_Title', 'Author'),
+                                 right_on=('book_title', 'book_authors'))
+# Check index etc.
+print('book_data_kaggle_join - dtypes, shape, head, index')
+print(book_data_kaggle_join.dtypes)
+print(book_data_kaggle_join.shape)
+print(book_data_kaggle_join.head())
+print('')
+print(book_data_kaggle_join.iloc[:5, [1, 4, 5, 15, 24]])
+
+# Set index to author and extract based on Terry Pratchett
+# Don't need to set index anymore because merging on author
+# and only author on DW_Orders_Merge is Terry Pratchett
+# book_data_kaggle_join.set_index('Author', inplace=True)
+# book_data_kaggle_TP = book_data_kaggle_join.loc[['Terry Pratchett']]
+
+# Check for missing data
+print('kaggle missing data?')
+print(book_data_kaggle_join.isnull().sum())
+
+# Only NaN's on dataframe re book_edition and book_isbn, which are not required.
+# Can now check data for only columns that are of interest.  Not doing this anymore
+# as gave problems with remove duplicates process.  Will use iloc later on when
+# analysing data.
+
+# book_data_kaggle_TP_subset = book_data_kaggle_TP.iloc[:, [7, 1, 9, 11, 12, 13, 19, 20, 21, 22]]
+# print('After i-loc on kaggle_TP')
+# print(book_data_kaggle_TP_subset.shape)
+
+# Index on Book_ID so that we can drop duplicates
+# Don't need to set the other index because didn't set index in the first place.
+# book_data_kaggle_TP_subset.set_index('Book_ID', inplace=True)
+
+# Drop Duplicates from dataset
+print('kaggle join')
+print(book_data_kaggle_join.iloc[:, [1]])
+print('Drop Duplicates')
+book_data_kaggle_join.drop_duplicates(subset='Book_Title', keep=False, inplace=True)
+print(book_data_kaggle_join.shape)
+print(book_data_kaggle_join.head())
 
 ###################################################################
 # Second File books.csv
@@ -294,7 +354,7 @@ print('Goodreads_TP_DW - dtypes and shape')
 print(Goodreads_TP_DW.dtypes)
 print(Goodreads_TP_DW.shape)
 
-# Print subset of book_data_kaggle and see what type of structure it is
+# Print subset of Goodreads_TP_DW and see what type of structure it is
 
 print(type(Goodreads_TP_DW.iloc[:, [2, 3]]))
 print(Goodreads_TP_DW.iloc[:5, [0, 9]])
@@ -307,11 +367,61 @@ print(DW_Orders_Merge.iloc[:5, [1, 5]])
 Goodreads_TP_DW_join = pd.merge(DW_Orders_Merge, Goodreads_TP_DW,
                                 how='inner', left_on=('Book_Title', 'Author'),
                                 right_on=('Title', 'Author'))
+print(Goodreads_TP_DW_join)
 
 # There are only two results out of 41 because of the Title structure.
 # Not using file. Moving onto the next!
 
+###################################################################
+# Review second books.csv file - from Archive.zip, so renaming
+# archive_books.csv
+###################################################################
+print('archive_books - dtypes and shape')
 
+archive_books = pd.read_csv(r'archive - books.csv')
+print(archive_books.dtypes)
+print(archive_books.shape)
+
+# Print subset of archive_books and see what type of structure it is
+
+print(type(archive_books.iloc[:, [0, 9]]))
+print(archive_books.iloc[:5, [7, 9]])
+
+print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
+print(DW_Orders_Merge.iloc[:5, [1, 5]])
+
+# Merge archive_books dataset with characters dataset to see if the dataset
+# all the books on it.
+archive_books_join = pd.merge(DW_Orders_Merge, archive_books,
+                              how='inner', left_on=('Book_Title', 'Author'),
+                              right_on=('original_title', 'authors'))
+
+# Missing books: The Last Hero and Amazing Maurice - these will have to be found and edited
+
+# Check index etc.
+print('archive_books_join - dtypes, shape, head, index')
+print(archive_books_join.dtypes)
+print(archive_books_join.shape)
+print(archive_books_join.head())
+print('')
+
+# Check for missing data
+print('archive_books missing data?')
+print(archive_books_join.isnull().sum())
+
+# Only NaN's on dataframe are isbn, isbn13, and language code, which are not required.
+# Can now check data for only columns that are of interest.
+
+# Drop Duplicates from dataset
+print('archive_books join')
+print(DW_Orders_Merge.iloc[5:, [1, 5]])
+print(archive_books_join.iloc[5:, [1, 8]])
+print('Drop Duplicates')
+archive_books_join.drop_duplicates(subset='Book_Title', keep=False, inplace=True)
+print(archive_books_join.shape)
+
+# print(archive_books_join.iloc[:5, [0, 1, 4, 5, 7, 10, 11, 12, 13, 14, 15, 18, 22, 36-34]])
+# DW_Orders_Merge.at[36, 'Book_Year'] = 2009 - change titles
 
 # plt.show()
 # end

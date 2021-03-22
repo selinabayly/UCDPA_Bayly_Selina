@@ -266,16 +266,16 @@ print(book_data_kaggle_TP.isnull().sum())
 
 book_data_kaggle_TP_subset = book_data_kaggle_TP.iloc[:, [7, 1, 9, 11, 12, 13, 19, 20, 21, 22]]
 print('After i-loc on kaggle_TP')
-print(book_data_kaggle_TP_subset.shape)
-
-# Index on Book_ID so that we can drop duplicates
-book_data_kaggle_TP_subset.set_index('Book_ID', inplace=True)
-
-# Drop Duplicates from dataset
-print('Drop Duplicates')
-book_data_kaggle_TP_subset.drop_duplicates(subset='Book_ID', keep=False, inplace=True)
-print(book_data_kaggle_TP_subset.shape)
+print(book_data_kaggle_TP_subset.index)
+print(book_data_kaggle_TP_subset.dtypes)
 print(book_data_kaggle_TP_subset.head())
+print(book_data_kaggle_TP_subset.shape)
+
+# Change index to Book_ID for removing duplicates
+book_data_kaggle_join.set_index('Book_ID', inplace=True)
+print(book_data_kaggle_TP_subset.index)
+book_data_kaggle_TP_subset.drop_duplicates(subset='Book_ID', keep=False, inplace=True)
+
 
 # plt.show()
 # end

@@ -272,10 +272,11 @@ print(book_data_kaggle_TP_subset.head())
 print(book_data_kaggle_TP_subset.shape)
 
 # Change index to Book_ID for removing duplicates
-book_data_kaggle_join.set_index('Book_ID', inplace=True)
+book_data_kaggle_join.set_index('Order', inplace=True)
 print(book_data_kaggle_TP_subset.index)
-book_data_kaggle_TP_subset.drop_duplicates(subset='Book_ID', keep=False, inplace=True)
-
+print(book_data_kaggle_TP_subset.shape)
+# book_data_kaggle_TP_subset.drop_duplicates(subset='Order', keep=False, inplace=True)
+print(book_data_kaggle_TP_subset.head())
 
 # plt.show()
 # end

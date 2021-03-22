@@ -227,56 +227,91 @@ plt.legend()
 ###################################################################
 # Review other files to see which ones will give the best results.
 ###################################################################
-book_data_kaggle = pd.read_csv(r'book_data_kaggle_subset.csv')
-print('book_data_kaggle - dtypes and shape')
-print(book_data_kaggle.dtypes)
-print(book_data_kaggle.shape)
+
+
+###################################################################
+# Second File books.csv
+###################################################################
+
+books = pd.read_csv(r'books.csv')
+
+# Note: 4 rows had an additional comma in the file.  Was saved as CSV
+# from XLSX because of other xls issues.  Choosing to delete 4 records
+# as they are not required anyway.
+print('')
+print('books - dtypes and shape')
+print(books.dtypes)
+print(books.shape)
+
+# Print subset of books and see what type of structure it is
+
+print(books.iloc[:5, [1, 2]])
+
+print(DW_Orders_Merge.iloc[:5, [1, 5]])
+
+# Merge books dataset with characters dataset to see if the dataset
+# all the books on it.
+books_join = pd.merge(DW_Orders_Merge, books,
+                      how='inner', left_on=('Book_Title', 'Author'),
+                      right_on=('title', 'authors'))
+
+# Results are zero.  The Book_Title is made up of the following:
+# Witches Abroad (Discworld  #12; Witches #3)                       Terry Pratchett
+# Witches Abroad (Discworld  #12)                                   Terry Pratchett
+# Small Gods (Discworld  #13)                                       Terry Pratchett
+# Wintersmith (Discworld  #35; Tiffany Aching  #3)                  Terry Pratchett
+# The Color of Magic (Discworld  #1; Rincewind  #1)	                Terry Pratchett
+# The Truth (Discworld  #25; Industrial Revolution  #2)	            Terry Pratchett
+# A Hat Full of Sky (Discworld  #32; Tiffany Aching  #2)            Terry Pratchett
+# #The Last Hero (Discworld #27; Rincewind #7)	                    Terry Pratchett/Paul Kidby
+# Wyrd Sisters (Discworld  #6; Witches #2)	                        Terry Pratchett
+# The Light Fantastic (Discworld  #2; Rincewind #2)	                Terry Pratchett
+# Equal Rites (Discworld  #3; Witches  #1)	                        Terry Pratchett
+# Moving Pictures (Discworld  #10; Industrial Revolution  #1)   	Terry Pratchett
+# Darwin's Watch (The Science of Discworld  #3)	                    Terry Pratchett/Ian Stewart/Jack Cohen
+# Reaper Man (Discworld  #11; Death  #2)	                        Terry Pratchett
+# Where's My Cow? (Discworld  #34.5)	                            Terry Pratchett/Melvyn Grant
+# Lords and Ladies (Discworld  #14; Witches #4)	                    Terry Pratchett
+# Guards! Guards! (Discworld  #8)	                                Terry Pratchett
+# Hogfather (Discworld  #20; Death  #4)	                            Terry Pratchett
+# The Amazing Maurice and His Educated Rodents (Discworld  #28)	    Terry Pratchett
+# Going Postal (Discworld  #33)	                                    Terry Pratchett
+# The Last Hero: A Discworld Fable (Discworld  #27)	                Terry Pratchett/Paul Kidby
+# Carpe Jugulum (Discworld #23; Witches #6)	                        Terry Pratchett
+
+# Decision made not to use this file.  There are only 22 results and 41 are expected, so
+# data is incomplete.
+# I could use ISIN function, but there is no point as the data is incomplete
+# Will move onto next file.
+
+###################################################################
+# Third file Goodreads_TP_DW.csv
+###################################################################
+
+Goodreads_TP_DW = pd.read_csv(r'Goodreads_TP_DW.csv')
+print('')
+print('Goodreads_TP_DW - dtypes and shape')
+print(Goodreads_TP_DW.dtypes)
+print(Goodreads_TP_DW.shape)
 
 # Print subset of book_data_kaggle and see what type of structure it is
 
-print(type(book_data_kaggle.iloc[:, [0, 9]]))
-print(book_data_kaggle.iloc[:5, [0, 9]])
+print(type(Goodreads_TP_DW.iloc[:, [2, 3]]))
+print(Goodreads_TP_DW.iloc[:5, [0, 9]])
 
 print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
 print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
 # Merge Kaggle dataset with characters dataset to see if the dataset
 # all the books on it.
-book_data_kaggle_join = pd.merge(DW_Orders_Merge, book_data_kaggle,
-                                 how='inner', left_on=('Book_Title', 'Author'),
-                                 right_on=('book_title', 'book_authors'))
-# Check index etc.
-print('book_data_kaggle_join - dtypes, shape, head, index')
-print(book_data_kaggle_join.dtypes)
-print(book_data_kaggle_join.shape)
-print(book_data_kaggle_join.head())
-print(book_data_kaggle_join.index)
-print('')
-print(book_data_kaggle_join.iloc[:5, [1, 4, 5, 15, 24]])
+Goodreads_TP_DW_join = pd.merge(DW_Orders_Merge, Goodreads_TP_DW,
+                                how='inner', left_on=('Book_Title', 'Author'),
+                                right_on=('Title', 'Author'))
 
-# Set index to author and extract based on Terry Pratchett
-book_data_kaggle_join.set_index('Author', inplace=True)
-book_data_kaggle_TP = book_data_kaggle_join.loc[['Terry Pratchett']]
+# There are only two results out of 41 because of the Title structure.
+# Not using file. Moving onto the next!
 
-# Check for missing data
-print(book_data_kaggle_TP.isnull().sum())
 
-# Only NaN's on dataframe re book_edition and book_isbn, which are not required.
-# Can now check data for only columns that are of interest
-
-book_data_kaggle_TP_subset = book_data_kaggle_TP.iloc[:, [7, 1, 9, 11, 12, 13, 19, 20, 21, 22]]
-print('After i-loc on kaggle_TP')
-print(book_data_kaggle_TP_subset.index)
-print(book_data_kaggle_TP_subset.dtypes)
-print(book_data_kaggle_TP_subset.head())
-print(book_data_kaggle_TP_subset.shape)
-
-# Change index to Book_ID for removing duplicates
-book_data_kaggle_join.set_index('Order', inplace=True)
-print(book_data_kaggle_TP_subset.index)
-print(book_data_kaggle_TP_subset.shape)
-# book_data_kaggle_TP_subset.drop_duplicates(subset='Order', keep=False, inplace=True)
-print(book_data_kaggle_TP_subset.head())
 
 # plt.show()
 # end

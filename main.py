@@ -498,20 +498,29 @@ archive_books_join_subset = archive_books_join[['Book_Id', 'Book_Title', 'Book_Y
                                                 'Character', 'Short_Character',
                                                 'Order', 'Label', 'Colour',
                                                 'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5']]
-archive_books_join_sort = archive_books_join_subset.sort_values(by=['Character', 'Order'])
+archive_books_join_sort = archive_books_join_subset.sort_values(by=['Character', 'Order'], ignore_index=True)
 archive_books_join_sort['Total_Ratings'] = 0
 archive_books_join_sort['Average_Ratings'] = 0
 
-# Loop through dataframe and calculate total and average ratings
+# Loop through dataframe and calculate Total Ratings (sum of all 5 ratings_)
+# and Average Ratings - average of (sum (percentage of each rating of the total * the rating))
+# Intentionally reusing variables
+j = -1
 for i in archive_books_join_sort.itertuples():
-    print(i[1], i[2], archive_books_join_sort.ix[i]['Book_Title'])
-    star_1 = i[11]
-    star_2 = i[12]
-    star_3 = i[13]
-    star_4 = i[14]
-    star_5 = i[15]
-    total_stars = star_1 + star_2 + star_3 + star_4 + star_5
-
+    j = j + 1
+# Total number of ratings
+    stars = [i[11], i[12], i[13], i[14], i[15]]
+    stars_tot = sum(stars)
+    print(stars,stars_tot)
+    archive_books_join_sort.at[j, 'Total_Ratings'] = stars_tot
+# Average Rating
+# Get each rating as a percentage of the whole
+# and multiply it by its star rating
+    for k in stars:
+        print ('k',k)
+        stars(k) = stars(k) / stars_tot * k
+    stars_tot = sum(stars)
+    print(stars, stars_tot)
 
 print(archive_books_join_sort.iloc[15])
 

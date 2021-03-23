@@ -516,12 +516,13 @@ for i in archive_books_join_sort.itertuples():
 # Average Rating
 # Get each rating as a percentage of the whole
 # and multiply it by its star rating
-    for k in stars:
-        print ('k',k)
-        stars(k) = stars(k) / stars_tot * k
+    stars_pc[] = 0
+    for k in range(5):
+        stars_pc[k+1] = stars[k+1] / stars_tot * (k+1)
+
     stars_tot = sum(stars)
     print(stars, stars_tot)
-
+)
 print(archive_books_join_sort.iloc[15])
 
 #############################################################################

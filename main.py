@@ -8,8 +8,10 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import urllib.request
+import math
+import seaborn as sns
 
-# pd.options.display.max_columns = 10
+# pd.options.display.max_columns = 6
 ##################################################
 # Import Datasets
 ##################################################
@@ -204,7 +206,11 @@ plt.legend()
 # Create the previous graph as a scatter instead of linear
 ################################################################
 line_public_timeline('Timeline of publication for Discworld characters including full Series - Scatter')
-
+#print('********************')
+#print(x1)
+#print(y1)
+#print(DW_Orders_Merge_Characters_x)
+#print(DW_Orders_Merge_Characters_y)
 plt.scatter(x1, y1, color='grey', marker='o', alpha=0.5, label='Full Series')
 
 for i in range(len(DW_Character_List)):
@@ -464,24 +470,6 @@ print('Missing Data? - DW_Orders_Merge:', len(DW_Orders_Merge),
       'archive_books_join:', len(archive_books_join),
       'Missing:', len(DW_Orders_Merge)-len(archive_books_join))
 
-################################################################
-# Get information on the Book Series
-################################################################
-
-print('----------------------------------')
-print('|                                |')
-print('|  First Book            :', DW_Orders_Merge['Book_Year'].min(), ' |')
-print('|  Last Book             :', DW_Orders_Merge['Book_Year'].max(), ' |')
-print('|  Period of Discworld   :', DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min(),
-      '   |')
-print('|  Number of books       :', len(DW_Orders_Merge),
-      '   |')
-print('|  Average Books per Year:',
-      round(len(DW_Orders_Merge) / (DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()), 2),
-      ' |')
-print('|                                |')
-print('----------------------------------')
-
 #############################################################################
 # Analyse Data in archive_books_join
 #############################################################################
@@ -493,14 +481,14 @@ print('# DW_Orders_Merge for crosschecking')
 print('########################################')
 
 # Extract required columns only and sort by character and then publication order
-archive_books_join_subset = archive_books_join[['Book_Id', 'Book_Title', 'Book_Year',
-                                                'Short_Title', 'Display_Title',
-                                                'Character', 'Short_Character',
-                                                'Order', 'Label', 'Colour',
+archive_books_join_subset = archive_books_join[['Book_Id', 'Book_Title', 'Book_Year',   # 1 2 3
+                                                'Short_Title', 'Display_Title',         # 4 5
+                                                'Character', 'Short_Character',         # 6 7
+                                                'Order', 'Label', 'Colour',             # 8 9 10 | 11, 12, 13, 14, 15
                                                 'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5']]
 archive_books_join_sort = archive_books_join_subset.sort_values(by=['Character', 'Order'], ignore_index=True)
-archive_books_join_sort['Total_Ratings'] = 0
-archive_books_join_sort['Average_Ratings'] = 0
+# Add column for ratings - will assign int64
+archive_books_join_sort['Total_Reviews'] = 0
 
 # Loop through dataframe and calculate:
 # Total Ratings   -> sum of all 5 ratings
@@ -511,43 +499,57 @@ for i in archive_books_join_sort.itertuples():
 # Total number of ratings
     stars = [i[11], i[12], i[13], i[14], i[15]]
     stars_tot = sum(stars)
-    archive_books_join_sort.at[j, 'Total_Ratings'] = stars_tot
+    archive_books_join_sort.at[j, 'Total_Reviews'] = stars_tot
 
 # Average Rating
     stars_pc = []
     for k in range(5):
-        stars_temp = stars[k] / stars_tot * (k+1)
-        stars_pc.insert(k, stars_temp)
+        stars_rate = stars[k] / stars_tot * (k+1)
+        stars_pc.insert(k, stars_rate)
 
-    stars_tot = sum(stars_pc)
-    archive_books_join_sort.at[j, 'Average_Rating'] = stars_tot
+    stars_pc_tot = sum(stars_pc)
+# Only allocating column here as it was being allocated int64 and need float64
+    archive_books_join_sort.at[j, 'Average_Rating'] = round(stars_pc_tot, 2)
 
 #############################################################################
-# Get Mean and Median for Ratings and Readership
+# Get Mean for Ratings and Reviews
 #############################################################################
 
+archive_books_character_averages = archive_books_join_sort.groupby(['Character']).mean()
+# Rounding to whole number, but gave .0, so using floor function to remove.
+Discworld_Average_Reviews = math.floor(round(archive_books_join_sort['Total_Reviews'].mean(), 0))
+Discworld_Average_Rating = round(archive_books_join_sort['Average_Rating'].mean(), 2)
+
+#############################################################################
+# Visualise Review numbers
+#############################################################################
+print(archive_books_join_sort.describe())
+print(archive_books_join_sort.info)
+
+print(sns.scatterplot(x='Total_Reviews', y='Average_Rating', data=archive_books_join_sort))
 
 ################################################################
 # Get information on the Book Series
 ################################################################
 
-print('----------------------------------')
-print('|                                |')
-print('|  First Book            :', DW_Orders_Merge['Book_Year'].min(), ' |')
-print('|  Last Book             :', DW_Orders_Merge['Book_Year'].max(), ' |')
-print('|  Period of Discworld   :', DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min(),
-      '   |')
-print('|  Number of books       :', len(DW_Orders_Merge),
-      '   |')
-print('|  Average Books per Year:',
+print('---------------------------------------')
+print('|                                     |')
+print('|  First Book                : ', DW_Orders_Merge['Book_Year'].min(), ' |')
+print('|  Last Book                 : ', DW_Orders_Merge['Book_Year'].max(), ' |')
+print('|  Period of Discworld       :   ', DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min(),
+      ' |')
+print('|  Number of books           :   ', len(DW_Orders_Merge), ' |')
+print('|  Average Books per Year    : ',
       round(len(DW_Orders_Merge) / (DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()), 2),
       ' |')
-print('|                                |')
-print('----------------------------------')
+print('|  Discworld_Average_Reviews :', Discworld_Average_Reviews, ' |')
+print('|  Discworld_Average_Rating  : ', Discworld_Average_Rating, ' |')
+print('|                                     |')
+print('---------------------------------------')
 
 #############################################################################
 # Render all the graphs
 #############################################################################
 
-# plt.show()
+plt.show()
 # end

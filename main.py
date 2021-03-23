@@ -502,28 +502,48 @@ archive_books_join_sort = archive_books_join_subset.sort_values(by=['Character',
 archive_books_join_sort['Total_Ratings'] = 0
 archive_books_join_sort['Average_Ratings'] = 0
 
-# Loop through dataframe and calculate Total Ratings (sum of all 5 ratings_)
-# and Average Ratings - average of (sum (percentage of each rating of the total * the rating))
-# Intentionally reusing variables
+# Loop through dataframe and calculate:
+# Total Ratings   -> sum of all 5 ratings
+# Average Ratings -> sum (percentage of each rating of the total * the rating)
 j = -1
 for i in archive_books_join_sort.itertuples():
     j = j + 1
 # Total number of ratings
     stars = [i[11], i[12], i[13], i[14], i[15]]
     stars_tot = sum(stars)
-    print(stars,stars_tot)
     archive_books_join_sort.at[j, 'Total_Ratings'] = stars_tot
-# Average Rating
-# Get each rating as a percentage of the whole
-# and multiply it by its star rating
-    stars_pc[] = 0
-    for k in range(5):
-        stars_pc[k+1] = stars[k+1] / stars_tot * (k+1)
 
-    stars_tot = sum(stars)
-    print(stars, stars_tot)
-)
-print(archive_books_join_sort.iloc[15])
+# Average Rating
+    stars_pc = []
+    for k in range(5):
+        stars_temp = stars[k] / stars_tot * (k+1)
+        stars_pc.insert(k, stars_temp)
+
+    stars_tot = sum(stars_pc)
+    archive_books_join_sort.at[j, 'Average_Rating'] = stars_tot
+
+#############################################################################
+# Get Mean and Median for Ratings and Readership
+#############################################################################
+
+
+################################################################
+# Get information on the Book Series
+################################################################
+
+print('----------------------------------')
+print('|                                |')
+print('|  First Book            :', DW_Orders_Merge['Book_Year'].min(), ' |')
+print('|  Last Book             :', DW_Orders_Merge['Book_Year'].max(), ' |')
+print('|  Period of Discworld   :', DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min(),
+      '   |')
+print('|  Number of books       :', len(DW_Orders_Merge),
+      '   |')
+print('|  Average Books per Year:',
+      round(len(DW_Orders_Merge) / (DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()), 2),
+      ' |')
+print('|                                |')
+print('----------------------------------')
 
 #############################################################################
 # Render all the graphs

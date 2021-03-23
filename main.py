@@ -173,12 +173,21 @@ for i in range(len(DW_Character_List)):
     DW_Orders_Merge_Characters_x[i] = DW_Orders_Merge_Characters[i]['Book_Year']
     DW_Orders_Merge_Characters_y[i] = DW_Orders_Merge_Characters[i]['Display_Title']
 
-# Plot the line graph
+# Plot the line graph - as one of the character subsets is standalone, a line
+# graph doesn't fit; a scatter will work better.  Only the series of characters
+# should have lines.
 line_public_timeline('Timeline of publication for Discworld characters')
+print('****', DW_Character_List)
 for i in range(len(DW_Character_List)):
-    plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
-             marker="o", linestyle="-", color=DW_Character_List[i][1],
-             label=DW_Character_List[i][2])
+    if i == 2:
+        plt.scatter(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
+                    alpha=1,
+                    color=DW_Character_List[i][1],
+                    label=DW_Character_List[i][2])
+    else:
+        plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
+                 marker="o", linestyle="-", color=DW_Character_List[i][1],
+                 label=DW_Character_List[i][2])
 plt.legend()
 
 ################################################################
@@ -476,10 +485,18 @@ print('########################################')
 # Get information on the Book Series
 ################################################################
 print(DW_Orders_Merge.dtypes)
-print('First Book:', DW_Orders_Merge['Book_Year'].min())
-print('Last Book:', DW_Orders_Merge['Book_Year'].max())
-print('Number of books:', len(DW_Orders_Merge))
-print('Average Books per Year:',
-      round((DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()) / len(DW_Orders_Merge), 2))
+print('----------------------------------')
+print('|                                |')
+print('|  First Book            :', DW_Orders_Merge['Book_Year'].min(), ' |')
+print('|  Last Book             :', DW_Orders_Merge['Book_Year'].max(), ' |')
+print('|  Period of Discworld   :', DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min(),
+      '   |')
+print('|  Number of books       :', len(DW_Orders_Merge),
+      '   |')
+print('|  Average Books per Year:',
+      round(len(DW_Orders_Merge) / (DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()), 2),
+      ' |')
+print('|                                |')
+print('----------------------------------')
 plt.show()
 # end

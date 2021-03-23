@@ -115,20 +115,28 @@ for i in DW_Orders_Merge.itertuples():
         print('Year ', i[0], ' (', i[3], ') not equal (', i[11], ')')
 
 ##################################################
+# Set common plt arguments
+##################################################
+
+
+def line_public_timeline(title_name):
+    plt.figure(title_name, figsize=(12, 8), linewidth=5, edgecolor='navy')
+    plt.title(title_name)
+    plt.xticks(rotation=45)
+    plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
+    plt.xlabel("Publication Year", fontsize=12)
+    plt.ylabel("Book Title", fontsize=12)
+
+
+##################################################
 # Plot a timeline of all the books being published
 ##################################################
 x1 = DW_Orders_Merge['Book_Year']
 y1 = DW_Orders_Merge['Display_Title']
 
 # Plot the line graph
-plt.figure('Timeline of Publication', figsize=(12, 10))
-plt.plot(x1, y1, marker="o", linestyle="-", color="b")
-plt.title('Timeline of Publication of Full Series')
-plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
-plt.tight_layout()
-plt.xlabel("Publication Year")
-plt.ylabel("Book Title")
+line_public_timeline('Timeline of publication of Discworld series')
+plt.plot(x1, y1, marker="o", linestyle="-", color="navy")
 
 ################################################################
 # Plot a timeline of all the books being published by character
@@ -166,19 +174,11 @@ for i in range(len(DW_Character_List)):
     DW_Orders_Merge_Characters_y[i] = DW_Orders_Merge_Characters[i]['Display_Title']
 
 # Plot the line graph
-plt.figure('Timeline of Publication for Characters', figsize=(12, 10))
-
+line_public_timeline('Timeline of publication for Discworld characters')
 for i in range(len(DW_Character_List)):
     plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
              marker="o", linestyle="-", color=DW_Character_List[i][1],
              label=DW_Character_List[i][2])
-
-plt.title('Timeline of Publication for Characters')
-plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
-plt.tight_layout()
-plt.xlabel("Publication Year", fontsize=16)
-plt.ylabel("Book Title", fontsize=16)
 plt.legend()
 
 ################################################################
@@ -187,41 +187,29 @@ plt.legend()
 ################################################################
 
 # Plot the line graph
-plt.figure('Timeline of Publication for Characters including Full Series', figsize=(12, 10))
+line_public_timeline('Timeline of publication for Discworld characters including full Series')
 
 plt.plot(x1, y1, marker="o", linestyle="-", color="grey", label='Full Series')
 
 for i in range(len(DW_Character_List)):
     plt.plot(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
-             marker="o", linestyle="-", color=DW_Character_List[i][1],
+             marker="o", linestyle="-",
+             color=DW_Character_List[i][1],
              label=DW_Character_List[i][2])
-
-plt.title('Timeline of Publication for Characters including Full Series')
-plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
-plt.tight_layout()
-plt.xlabel("Publication Year", fontsize=16)
-plt.ylabel("Book Title", fontsize=16)
 plt.legend()
 
 ################################################################
 # Create the previous graph as a scatter instead of linear
 ################################################################
-plt.figure('Timeline of Publication for Characters including Full Series - Scatter', figsize=(12, 10))
+line_public_timeline('Timeline of publication for Discworld characters including full Series - Scatter')
 
 plt.scatter(x1, y1, color='grey', marker='o', alpha=0.5, label='Full Series')
+
 for i in range(len(DW_Character_List)):
     plt.scatter(DW_Orders_Merge_Characters_x[i], DW_Orders_Merge_Characters_y[i],
-                alpha=0.5,
+                alpha=0.95,
                 color=DW_Character_List[i][1],
                 label=DW_Character_List[i][2])
-
-plt.title('Timeline of Publication for Characters including Full Series')
-plt.xticks(rotation=45)
-plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
-plt.tight_layout()
-plt.xlabel("Publication Year", fontsize=16)
-plt.ylabel("Book Title", fontsize=16)
 plt.legend()
 
 ###################################################################
@@ -293,6 +281,8 @@ book_data_kaggle_join.drop_duplicates(subset='Book_Title', keep=False, inplace=T
 print(book_data_kaggle_join.shape)
 print(book_data_kaggle_join.head())
 
+# Not using file - insufficient data
+
 ###################################################################
 # Second File books.csv
 ###################################################################
@@ -331,7 +321,7 @@ books_join = pd.merge(DW_Orders_Merge, books,
 # The Color of Magic (Discworld  #1; Rincewind  #1)	                Terry Pratchett
 # The Truth (Discworld  #25; Industrial Revolution  #2)	            Terry Pratchett
 # A Hat Full of Sky (Discworld  #32; Tiffany Aching  #2)            Terry Pratchett
-# #The Last Hero (Discworld #27; Rincewind #7)	                    Terry Pratchett/Paul Kidby
+# The Last Hero (Discworld #27; Rincewind #7)	                    Terry Pratchett/Paul Kidby
 # Wyrd Sisters (Discworld  #6; Witches #2)	                        Terry Pratchett
 # The Light Fantastic (Discworld  #2; Rincewind #2)	                Terry Pratchett
 # Equal Rites (Discworld  #3; Witches  #1)	                        Terry Pratchett
@@ -374,7 +364,7 @@ print(Goodreads_TP_DW.iloc[:5, [0, 9]])
 # print(type(DW_Orders_Merge.iloc[:, [1, 5]]))
 # print(DW_Orders_Merge.iloc[:5, [1, 5]])
 
-# Merge Kaggle dataset with characters dataset to see if the dataset
+# Merge Goodreads_TP_DW dataset with characters dataset to see if the dataset
 # all the books on it.
 Goodreads_TP_DW_join = pd.merge(DW_Orders_Merge, Goodreads_TP_DW,
                                 how='inner', left_on=('Book_Title', 'Author'),
@@ -482,5 +472,14 @@ print('# Using archive_books join and possibly ')
 print('# DW_Orders_Merge for crosschecking')
 print('########################################')
 
-# plt.show()
+################################################################
+# Get information on the Book Series
+################################################################
+print(DW_Orders_Merge.dtypes)
+print('First Book:', DW_Orders_Merge['Book_Year'].min())
+print('Last Book:', DW_Orders_Merge['Book_Year'].max())
+print('Number of books:', len(DW_Orders_Merge))
+print('Average Books per Year:',
+      round((DW_Orders_Merge['Book_Year'].max() - DW_Orders_Merge['Book_Year'].min()) / len(DW_Orders_Merge), 2))
+plt.show()
 # end

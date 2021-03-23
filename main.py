@@ -62,17 +62,11 @@ DW_Character_Order = pd.read_csv(r'DW_Public_Character_Order.csv')
 # Showing shape, columns and data types
 print('DW_Publication_Order shape:')
 print(DW_Publication_Order.shape)
-print('DW_Publication_Order dtypes:')
-print(DW_Publication_Order.dtypes)
 print('DW_Character_Order shape:')
 print(DW_Character_Order.shape)
-print('DW_Character_Order dtypes:')
-print(DW_Character_Order.dtypes)
 
 # Convert Book Year to numeric to make it easier for comparison and making bins on graphs
 DW_Publication_Order['Book_Year'] = DW_Publication_Order.Book_Year.astype('int64')
-print('DW_Publication_Order dtypes:')
-print(DW_Publication_Order.dtypes)
 
 # Merge the tables and compare columns
 DW_Orders_Merge = pd.merge(DW_Publication_Order,
@@ -82,8 +76,7 @@ DW_Orders_Merge = pd.merge(DW_Publication_Order,
                            right_on='DW_ID')
 print('DW_Orders_Merge shape:')
 print(DW_Orders_Merge.shape)
-print('DW_Orders_Merge dtypes:')
-print(DW_Orders_Merge.dtypes)
+
 
 # We now know we have 41 books to work from.  Any merges / joins with book databases
 # should return 41 joins.
@@ -235,7 +228,7 @@ print('######################################')
 
 book_data_kaggle = pd.read_csv(r'book_data_kaggle_subset.csv')
 print('book_data_kaggle - dtypes and shape')
-print(book_data_kaggle.dtypes)
+# print(book_data_kaggle.dtypes)
 print(book_data_kaggle.shape)
 
 # Print subset of book_data_kaggle and see what type of structure it is
@@ -253,7 +246,7 @@ book_data_kaggle_join = pd.merge(DW_Orders_Merge, book_data_kaggle,
                                  right_on=('book_title', 'book_authors'))
 # Check index etc.
 print('book_data_kaggle_join - dtypes, shape, head, index')
-print(book_data_kaggle_join.dtypes)
+# print(book_data_kaggle_join.dtypes)
 print(book_data_kaggle_join.shape)
 print(book_data_kaggle_join.head())
 print('')
@@ -307,7 +300,7 @@ books = pd.read_csv(r'books.csv')
 # as they are not required anyway.
 print('')
 print('books - dtypes and shape')
-print(books.dtypes)
+# print(books.dtypes)
 print(books.shape)
 
 # Print subset of books and see what type of structure it is
@@ -362,7 +355,7 @@ print('######################################')
 Goodreads_TP_DW = pd.read_csv(r'Goodreads_TP_DW.csv')
 print('')
 print('Goodreads_TP_DW - dtypes and shape')
-print(Goodreads_TP_DW.dtypes)
+# print(Goodreads_TP_DW.dtypes)
 print(Goodreads_TP_DW.shape)
 
 # Print subset of Goodreads_TP_DW and see what type of structure it is
@@ -396,7 +389,7 @@ print('archive_books - dtypes and shape')
 
 archive_books = pd.read_csv(r'archive - books.csv')
 print(archive_books.dtypes)
-print(archive_books.shape)
+# print(archive_books.shape)
 
 # Print subset of datasets to be merged
 # print(archive_books.iloc[:5, [7, 9]])
@@ -471,20 +464,10 @@ print('Missing Data? - DW_Orders_Merge:', len(DW_Orders_Merge),
       'archive_books_join:', len(archive_books_join),
       'Missing:', len(DW_Orders_Merge)-len(archive_books_join))
 
-#############################################################################
-# Analyse Data in archive_books_join
-#############################################################################
-
-print('########################################')
-print('# Data Analysis of archive_books_join')
-print('# Using archive_books join and possibly ')
-print('# DW_Orders_Merge for crosschecking')
-print('########################################')
-
 ################################################################
 # Get information on the Book Series
 ################################################################
-print(DW_Orders_Merge.dtypes)
+
 print('----------------------------------')
 print('|                                |')
 print('|  First Book            :', DW_Orders_Merge['Book_Year'].min(), ' |')
@@ -498,5 +481,43 @@ print('|  Average Books per Year:',
       ' |')
 print('|                                |')
 print('----------------------------------')
-plt.show()
+
+#############################################################################
+# Analyse Data in archive_books_join
+#############################################################################
+
+print('########################################')
+print('# Data Analysis of archive_books_join')
+print('# Using archive_books join and possibly ')
+print('# DW_Orders_Merge for crosschecking')
+print('########################################')
+
+# Extract required columns only and sort by character and then publication order
+archive_books_join_subset = archive_books_join[['Book_Id', 'Book_Title', 'Book_Year',
+                                                'Short_Title', 'Display_Title',
+                                                'Character', 'Short_Character',
+                                                'Order', 'Label', 'Colour',
+                                                'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5']]
+archive_books_join_sort = archive_books_join_subset.sort_values(by=['Character', 'Order'])
+archive_books_join_sort['Total_Ratings'] = 0
+archive_books_join_sort['Average_Ratings'] = 0
+
+# Loop through dataframe and calculate total and average ratings
+for i in archive_books_join_sort.itertuples():
+    print(i[1], i[2], archive_books_join_sort.ix[i]['Book_Title'])
+    star_1 = i[11]
+    star_2 = i[12]
+    star_3 = i[13]
+    star_4 = i[14]
+    star_5 = i[15]
+    total_stars = star_1 + star_2 + star_3 + star_4 + star_5
+
+
+print(archive_books_join_sort.iloc[15])
+
+#############################################################################
+# Render all the graphs
+#############################################################################
+
+# plt.show()
 # end

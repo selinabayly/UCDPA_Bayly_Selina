@@ -79,7 +79,6 @@ DW_Orders_Merge = pd.merge(DW_Publication_Order,
 print('DW_Orders_Merge shape:')
 print(DW_Orders_Merge.shape)
 
-
 # We now know we have 41 books to work from.  Any merges / joins with book databases
 # should return 41 joins.
 # Check title names
@@ -206,11 +205,7 @@ plt.legend()
 # Create the previous graph as a scatter instead of linear
 ################################################################
 line_public_timeline('Timeline of publication for Discworld characters including full Series - Scatter')
-#print('********************')
-#print(x1)
-#print(y1)
-#print(DW_Orders_Merge_Characters_x)
-#print(DW_Orders_Merge_Characters_y)
+
 plt.scatter(x1, y1, color='grey', marker='o', alpha=0.5, label='Full Series')
 
 for i in range(len(DW_Character_List)):
@@ -521,12 +516,61 @@ Discworld_Average_Reviews = math.floor(round(archive_books_join_sort['Total_Revi
 Discworld_Average_Rating = round(archive_books_join_sort['Average_Rating'].mean(), 2)
 
 #############################################################################
-# Visualise Review numbers
+# Basic set up for bar graphs
 #############################################################################
-print(archive_books_join_sort.describe())
-print(archive_books_join_sort.info)
 
-print(sns.scatterplot(x='Total_Reviews', y='Average_Rating', data=archive_books_join_sort))
+
+def bar_books(title_name):
+    plt.figure(title_name, figsize=(12, 8), linewidth=5, edgecolor='navy')
+    plt.title(title_name)
+    plt.xticks(rotation=45)
+    plt.yticks(np.arange(3, 5, 0.2))
+    plt.xlabel("Book Title", fontsize=12)
+    plt.ylabel("Ratings", fontsize=12)
+
+
+#############################################################################
+# Create a bar graph of the average ratings per book - 2 side by side graphs
+# Grouping by Label, which is a shortened version of Character
+#############################################################################
+bar_books('Ratings & Reviews of the Discworld Series')
+
+character_rating = archive_books_join_sort.groupby('Label').agg(np.mean)['Average_Rating']
+plt.subplot(211)
+plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.ylabel("Average Rating per Book", fontsize=12)
+plt.yticks(np.arange(0, 5, 0.25))
+plt.plot([0, 7], [4.15, 4.15], color='green', label='Average Rating')
+plt.bar(x=character_rating.index, height=character_rating, color='navy')
+plt.legend()
+
+character_reviews = archive_books_join_sort.groupby('Label').agg(np.mean)['Total_Reviews']
+plt.subplot(212)
+plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.ylabel("Number of Reviews", fontsize=12)
+plt.yticks(np.arange(0, 80000, 5000))
+plt.plot([0, 7], [59162, 59162], color='red', label='Average Reviews')
+plt.bar(x=character_reviews.index, height=character_reviews, color='navy')
+plt.legend()
+
+#############################################################################
+# Seaborn Scatterplot to see whether there is a relationship
+# between number of reviews per book and average rating - None
+# Put an average line marker on x and y axis to denote how much is above
+# or below the average
+#############################################################################
+plt.figure('Seaborn Scatterplot - Relationship between Number of Reviews and Average Rating',
+           figsize=(12, 8), linewidth=5, edgecolor='navy')
+plt.title('Seaborn Scatterplot - Relationship between Number of Reviews and Average Rating')
+plt.xticks(rotation=45)
+plt.xticks(np.arange(10000, 230000, 20000))
+plt.yticks(np.arange(3, 5, 0.2))
+plt.xlabel("Number of Reviews", fontsize=12)
+plt.ylabel("Average Rate per Book", fontsize=12)
+plt.plot([10000, 230000], [4.15, 4.15], color='green', label='Average Rating')
+plt.plot([59162, 59162], [3, 5], color='red', label='Average Reviews')
+Seaborn_Scatter = sns.scatterplot(x='Total_Reviews', y='Average_Rating', data=archive_books_join_sort, color='navy')
+plt.legend()
 
 ################################################################
 # Get information on the Book Series

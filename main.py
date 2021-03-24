@@ -1,5 +1,7 @@
 # Certificate in Data Analytics - UCD
 # Selina Bayly March 2021
+# Git Repository - https://github.com/selinabayly/UCDPA_Bayly_Selina
+
 
 # Imports
 from bs4 import BeautifulSoup
@@ -122,9 +124,14 @@ def line_public_timeline(title_name):
     return title_name
 
 
+# Removing save image as it is cutting off some of the titles.  I have tried maximising
+# the screen, but it didn't work.  Will save manually instead
+
+
 def save_image(title_name):
     plt.get_current_fig_manager().window.showMaximized()
-    plt.savefig(title_name + '.png')
+#    plt.savefig(title_name + '.png')
+    print('Printed plot', title_name)
 
 
 ##################################################
@@ -526,7 +533,8 @@ Discworld_Average_Rating = round(archive_books_join_sort['Average_Rating'].mean(
 
 #############################################################################
 # Basic set up for bar graphs and create a list of colours for the bar graph
-#############################################################################
+###############################################
+# ##############################
 
 
 def bar_books(title_name):
@@ -569,7 +577,7 @@ plt.subplot(212)
 plt.xlabel("Discworld Character Series", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
 for y in range(len(character_rating)):
-    plt.text(y, 2000, math.floor(round(character_reviews[y], 0)), ha='center', color='white')
+    plt.text(y, 5000, math.floor(round(character_reviews[y], 0)), ha='center', color='white')
 plt.yticks(np.arange(0, 80000, 5000))
 plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
 plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
@@ -597,7 +605,7 @@ plt.xticks(rotation=45)
 plt.yticks(np.arange(0, 5, 0.25))
 plt.plot([0, 42], [4.15, 4.15], color='grey', label='Average Rating')
 plt.bar(x=book_rating.index, height=book_rating, color=colour_list)
-plt.legend()
+plt.legend(loc='center right')
 
 book_reviews = pd.Series(archive_books_join_sort['Total_Reviews'].values,
                          index=archive_books_join_sort['Short_Title'])
@@ -606,13 +614,13 @@ plt.subplot(212)
 plt.xlabel("Discworld Books", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
 for y in range(len(book_reviews)):
-    plt.text(y, 2000, round(book_reviews[y], 2), ha='center', rotation=90, color='white')
+    plt.text(y, 5000, round(book_reviews[y], 2), ha='center', rotation=90, color='white')
 plt.xticks(rotation=45)
 plt.yticks(np.arange(0, 230000, 10000))
 plt.plot([0, 42], [59162, 59162], color='grey', label='Average Reviews')
 plt.bar(x=book_reviews.index, height=book_reviews, color=colour_list)
 plt.legend()
-save_image(save_name)
+plt.legend(loc='center right')
 
 #############################################################################
 # Seaborn Scatterplot to see whether there is a relationship
@@ -635,9 +643,9 @@ Seaborn_Scatter = sns.scatterplot(x='Total_Reviews', y='Average_Rating', data=ar
 plt.legend()
 save_image(save_name)
 
-################################################################
-# Print Table of the Books
-################################################################
+###################################################################
+# Print Table of the Books - not working - will extract from excel
+###################################################################
 
 print_table = archive_books_join_sort[['Book_Title', 'Book_Id', 'Short_Title', 'Book_Year', 'Character',
                                        'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5',
@@ -648,26 +656,18 @@ print_table.sort_values(by=['Book_Id'], inplace=True)
 print_table_cols = print_table.columns.tolist()
 print_table_rows = print_table['Book_Title'].values.tolist()
 print_table_list = print_table.values.tolist()
-print(print_table_cols)
-print(print_table_rows)
-print(print_table_list)
-plt.table(cellText=print_table_list,
-                      rowLabels=print_table_rows,
-#                      rowColours=colors,
-                      colLabels=print_table_cols,
-                      loc='bottom')
 
 save_name = 'Table - Discworld Books'
 plt.figure(save_name, figsize=(12, 8), linewidth=5, edgecolor='navy')
 plt.title(save_name)
 plt.axis('off')
 
-plt.table(cellText=print_table_list,
-                      rowLabels=print_table_rows,
-#                      rowColours=colors,
-                      colLabels=print_table_cols,
-                      loc='bottom')
+# plt.table(cellText=print_table_list,
+#           rowLabels=print_table_rows,
+#           colLabels=print_table_cols,
+#           loc='center')
 
+plt.title('The Discworld Series')
 
 ################################################################
 # Get information on the Book Series

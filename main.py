@@ -1,4 +1,3 @@
-
 # Certificate in Data Analytics - UCD
 # Selina Bayly March 2021
 
@@ -109,7 +108,7 @@ for i in DW_Orders_Merge.itertuples():
         print('Year ', i[0], ' (', i[3], ') not equal (', i[11], ')')
 
 ##################################################
-# Set common plt arguments
+# Set common plt arguments and save figure
 ##################################################
 
 
@@ -120,6 +119,12 @@ def line_public_timeline(title_name):
     plt.xticks(np.arange(min(x1), max(x1) + 1, 1.0))
     plt.xlabel("Publication Year", fontsize=12)
     plt.ylabel("Book Title", fontsize=12)
+    return title_name
+
+
+def save_image(title_name):
+    plt.get_current_fig_manager().window.showMaximized()
+    plt.savefig(title_name + '.png')
 
 
 ##################################################
@@ -129,8 +134,9 @@ x1 = DW_Orders_Merge['Book_Year']
 y1 = DW_Orders_Merge['Display_Title']
 
 # Plot the line graph
-line_public_timeline('Timeline of publication of Discworld series')
+save_name = line_public_timeline('Timeline of publication of Discworld series')
 plt.plot(x1, y1, marker="o", linestyle="-", color="navy")
+save_image(save_name)
 
 ################################################################
 # Plot a timeline of all the books being published by character
@@ -170,7 +176,7 @@ for i in range(len(DW_Character_List)):
 # Plot the line graph - as one of the character subsets is standalone, a line
 # graph doesn't fit; a scatter will work better.  Only the series of characters
 # should have lines.
-line_public_timeline('Timeline of publication for Discworld characters')
+save_name = line_public_timeline('Timeline of publication for Discworld characters')
 print('****', DW_Character_List)
 for i in range(len(DW_Character_List)):
     if i == 2:
@@ -183,6 +189,7 @@ for i in range(len(DW_Character_List)):
                  marker="o", linestyle="-", color=DW_Character_List[i][1],
                  label=DW_Character_List[i][2])
 plt.legend()
+save_image(save_name)
 
 ################################################################
 # Plot a timeline of all the books being published by character
@@ -190,7 +197,7 @@ plt.legend()
 ################################################################
 
 # Plot the line graph
-line_public_timeline('Timeline of publication for Discworld characters including full Series')
+save_name = line_public_timeline('Timeline of publication for Discworld characters including full Series')
 
 plt.plot(x1, y1, marker="o", linestyle="-", color="grey", label='Full Series')
 
@@ -200,11 +207,12 @@ for i in range(len(DW_Character_List)):
              color=DW_Character_List[i][1],
              label=DW_Character_List[i][2])
 plt.legend()
+save_image(save_name)
 
 ################################################################
 # Create the previous graph as a scatter instead of linear
 ################################################################
-line_public_timeline('Timeline of publication for Discworld characters including full Series - Scatter')
+save_name = line_public_timeline('Timeline of publication for Discworld characters including full Series - Scatter')
 
 plt.scatter(x1, y1, color='grey', marker='o', alpha=0.5, label='Full Series')
 
@@ -214,6 +222,7 @@ for i in range(len(DW_Character_List)):
                 color=DW_Character_List[i][1],
                 label=DW_Character_List[i][2])
 plt.legend()
+save_image(save_name)
 
 ###################################################################
 # Review other files to see which ones will give the best results.
@@ -516,42 +525,97 @@ Discworld_Average_Reviews = math.floor(round(archive_books_join_sort['Total_Revi
 Discworld_Average_Rating = round(archive_books_join_sort['Average_Rating'].mean(), 2)
 
 #############################################################################
-# Basic set up for bar graphs
+# Basic set up for bar graphs and create a list of colours for the bar graph
 #############################################################################
 
 
 def bar_books(title_name):
     plt.figure(title_name, figsize=(12, 8), linewidth=5, edgecolor='navy')
     plt.title(title_name)
-    plt.xticks(rotation=45)
-    plt.yticks(np.arange(3, 5, 0.2))
-    plt.xlabel("Book Title", fontsize=12)
-    plt.ylabel("Ratings", fontsize=12)
+    plt.suptitle(title_name)
+    return title_name
+
+
+def extract_colours(colour_details):
+    colour_details.sort()
+    temp_colour = []
+    for z in range(len(colour_details)):
+        temp_colour.insert(z, colour_details[z][1])
+    return temp_colour
 
 
 #############################################################################
+#                       At Character Level
 # Create a bar graph of the average ratings per book - 2 side by side graphs
 # Grouping by Label, which is a shortened version of Character
 #############################################################################
-bar_books('Ratings & Reviews of the Discworld Series')
+save_name = bar_books('Ratings & Reviews of the Discworld Series')
 
 character_rating = archive_books_join_sort.groupby('Label').agg(np.mean)['Average_Rating']
+
+colour_list = extract_colours(archive_books_join_sort[['Label', 'Colour']].value_counts().index[:].tolist())
 plt.subplot(211)
 plt.xlabel("Discworld Character sub-series", fontsize=12)
 plt.ylabel("Average Rating per Book", fontsize=12)
+for y in range(len(character_rating)):
+    print(character_rating.index)
+    print(y, character_rating.index[y])
+    plt.text(y, 1, round(character_rating[y], 2), ha='center', color='grey')
 plt.yticks(np.arange(0, 5, 0.25))
-plt.plot([0, 7], [4.15, 4.15], color='green', label='Average Rating')
-plt.bar(x=character_rating.index, height=character_rating, color='navy')
+plt.plot([0, 7], [4.15, 4.15], color='grey', label='Average Rating')
+plt.bar(x=character_rating.index, height=character_rating, color=colour_list)
 plt.legend()
 
 character_reviews = archive_books_join_sort.groupby('Label').agg(np.mean)['Total_Reviews']
 plt.subplot(212)
 plt.xlabel("Discworld Character sub-series", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
+for y in range(len(character_rating)):
+    print(character_reviews.index)
+    print(y, character_reviews.index[y])
+    plt.text(y, 1000, round(character_reviews[y], 2), ha='center', color='grey')
 plt.yticks(np.arange(0, 80000, 5000))
-plt.plot([0, 7], [59162, 59162], color='red', label='Average Reviews')
-plt.bar(x=character_reviews.index, height=character_reviews, color='navy')
+plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
+plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
 plt.legend()
+save_image(save_name)
+
+#############################################################################
+#                       At Book Level
+# Create a bar graph of the average ratings per book - 2 side by side graphs
+# Grouping by Label, which is a shortened version of Character
+#############################################################################
+
+save_name = bar_books('Ratings & Reviews of the Discworld Books')
+
+character_rating = archive_books_join_sort.groupby('Label').agg(np.mean)['Average_Rating']
+
+colour_list = extract_colours(archive_books_join_sort[['Label', 'Colour']].value_counts().index[:].tolist())
+plt.subplot(211)
+plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.ylabel("Average Rating per Book", fontsize=12)
+for y in range(len(character_rating)):
+    print(character_rating.index)
+    print(y, character_rating.index[y])
+    plt.text(y, 1, round(character_rating[y], 2), ha='center', color='white')
+plt.yticks(np.arange(0, 5, 0.25))
+plt.plot([0, 7], [4.15, 4.15], color='grey', label='Average Rating')
+plt.bar(x=character_rating.index, height=character_rating, color=colour_list)
+plt.legend()
+
+character_reviews = archive_books_join_sort.groupby('Label').agg(np.mean)['Total_Reviews']
+plt.subplot(212)
+plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.ylabel("Number of Reviews", fontsize=12)
+for y in range(len(character_rating)):
+    print(character_reviews.index)
+    print(y, character_reviews.index[y])
+    plt.text(y, 1000, round(character_reviews[y], 2), ha='center', color='white')
+plt.yticks(np.arange(0, 80000, 5000))
+plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
+plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
+plt.legend()
+save_image(save_name)
 
 #############################################################################
 # Seaborn Scatterplot to see whether there is a relationship
@@ -559,9 +623,10 @@ plt.legend()
 # Put an average line marker on x and y axis to denote how much is above
 # or below the average
 #############################################################################
-plt.figure('Seaborn Scatterplot - Relationship between Number of Reviews and Average Rating',
+save_name = 'Seaborn Scatterplot - Relationship between Number of Reviews and Average Rating'
+plt.figure(save_name,
            figsize=(12, 8), linewidth=5, edgecolor='navy')
-plt.title('Seaborn Scatterplot - Relationship between Number of Reviews and Average Rating')
+plt.title(save_name)
 plt.xticks(rotation=45)
 plt.xticks(np.arange(10000, 230000, 20000))
 plt.yticks(np.arange(3, 5, 0.2))
@@ -571,6 +636,7 @@ plt.plot([10000, 230000], [4.15, 4.15], color='green', label='Average Rating')
 plt.plot([59162, 59162], [3, 5], color='red', label='Average Reviews')
 Seaborn_Scatter = sns.scatterplot(x='Total_Reviews', y='Average_Rating', data=archive_books_join_sort, color='navy')
 plt.legend()
+save_image(save_name)
 
 ################################################################
 # Get information on the Book Series
@@ -594,6 +660,5 @@ print('---------------------------------------')
 #############################################################################
 # Render all the graphs
 #############################################################################
-
 plt.show()
 # end

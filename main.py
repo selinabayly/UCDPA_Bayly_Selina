@@ -569,7 +569,7 @@ plt.subplot(212)
 plt.xlabel("Discworld Character Series", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
 for y in range(len(character_rating)):
-    plt.text(y, 1500, math.floor(round(character_reviews[y], 0)), ha='center', color='white')
+    plt.text(y, 2000, math.floor(round(character_reviews[y], 0)), ha='center', color='white')
 plt.yticks(np.arange(0, 80000, 5000))
 plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
 plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
@@ -606,7 +606,7 @@ plt.subplot(212)
 plt.xlabel("Discworld Books", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
 for y in range(len(book_reviews)):
-    plt.text(y, 1500, round(book_reviews[y], 2), ha='center', rotation=90, color='white')
+    plt.text(y, 2000, round(book_reviews[y], 2), ha='center', rotation=90, color='white')
 plt.xticks(rotation=45)
 plt.yticks(np.arange(0, 230000, 10000))
 plt.plot([0, 42], [59162, 59162], color='grey', label='Average Reviews')
@@ -636,6 +636,40 @@ plt.legend()
 save_image(save_name)
 
 ################################################################
+# Print Table of the Books
+################################################################
+
+print_table = archive_books_join_sort[['Book_Title', 'Book_Id', 'Short_Title', 'Book_Year', 'Character',
+                                       'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5',
+                                       'Average_Rating', 'Total_Reviews', 'Colour']].copy()
+
+print_table.sort_values(by=['Book_Id'], inplace=True)
+
+print_table_cols = print_table.columns.tolist()
+print_table_rows = print_table['Book_Title'].values.tolist()
+print_table_list = print_table.values.tolist()
+print(print_table_cols)
+print(print_table_rows)
+print(print_table_list)
+plt.table(cellText=print_table_list,
+                      rowLabels=print_table_rows,
+#                      rowColours=colors,
+                      colLabels=print_table_cols,
+                      loc='bottom')
+
+save_name = 'Table - Discworld Books'
+plt.figure(save_name, figsize=(12, 8), linewidth=5, edgecolor='navy')
+plt.title(save_name)
+plt.axis('off')
+
+plt.table(cellText=print_table_list,
+                      rowLabels=print_table_rows,
+#                      rowColours=colors,
+                      colLabels=print_table_cols,
+                      loc='bottom')
+
+
+################################################################
 # Get information on the Book Series
 ################################################################
 
@@ -657,6 +691,6 @@ print('---------------------------------------')
 #############################################################################
 # Render all the graphs
 #############################################################################
-
 plt.show()
+
 # end

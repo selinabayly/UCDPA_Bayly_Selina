@@ -1,13 +1,13 @@
 ﻿DW_ID,Title,Author,Short_Title,Character,Order,Publisher,Publication_Date,Display_Title,Short_Character,Label,Colour
-1,The Colour of Magic,Terry Pratchett,tCoM,The Wizards/Rincewind,01 ,Gollancz,1983,1. The Colour of Magic,Wd,Wizards,yellow
-2,The Light Fantastic,Terry Pratchett,tLF,The Wizards/Rincewind,02 ,Gollancz,1986,2. The Light Fantastic,Wd,Wizards,yellow
+1,The Colour of Magic,Terry Pratchett,tCoM,The Wizards/Rincewind,01 ,Gollancz,1983,1. The Colour of Magic,Wd,Wizards,brown
+2,The Light Fantastic,Terry Pratchett,tLF,The Wizards/Rincewind,02 ,Gollancz,1986,2. The Light Fantastic,Wd,Wizards,brown
 3,Equal Rites,Terry Pratchett,ER,The Witches,03 ,Gollancz,1987,3. Equal Rites,Wh,Witches,purple
 4,Mort,Terry Pratchett,Mt,Death,04 ,Gollancz,1987,4. Mort,Dh,Death,black
-5,Sourcery,Terry Pratchett,Sy,The Wizards/Rincewind,05 ,Gollancz,1988,5. Sourcery,Wd,Wizards,yellow
+5,Sourcery,Terry Pratchett,Sy,The Wizards/Rincewind,05 ,Gollancz,1988,5. Sourcery,Wd,Wizards,brown
 6,Wyrd Sisters,Terry Pratchett,WS,The Witches,06 ,Gollancz,1988,6. Wyrd Sisters,Wh,Witches,purple
 7,Pyramids,Terry Pratchett,P,Standalone,07 ,Gollancz,1989,7. Pyramids,Se,Standalone,orange
 8,Guards! Guards!,Terry Pratchett,GG,The City Watch,08 ,Gollancz,1989,8. Guards! Guards!,CW,City Watch,blue
-9,Eric,Terry Pratchett,E,The Wizards/Rincewind,09 ,Gollancz,1990,9. Eric,Wd,Wizards,yellow
+9,Eric,Terry Pratchett,E,The Wizards/Rincewind,09 ,Gollancz,1990,9. Eric,Wd,Wizards,brown
 10,Moving Pictures,Terry Pratchett,MP,Standalone,10 ,Gollancz,1990,10. Moving Pictures,Se,Standalone,orange
 11,Reaper Man,Terry Pratchett,RM,Death,11 ,Gollancz,1991,11. Reaper Man,Dh,Death,black
 12,Witches Abroad,Terry Pratchett,WA,The Witches,12 ,Gollancz,1991,12. Witches Abroad,Wh,Witches,purple
@@ -15,28 +15,28 @@
 14,Lords and Ladies,Terry Pratchett,LL,The Witches,14 ,Gollancz,1992,14. Lords and Ladies,Wh,Witches,purple
 15,Men at Arms,Terry Pratchett,MaA,The City Watch,15 ,Gollancz,1993,15. Men at Arms,CW,City Watch,blue
 16,Soul Music,Terry Pratchett,SM,Death,16 ,Gollancz,1994,16. Soul Music,Dh,Death,black
-17,Interesting Times,Terry Pratchett,IT,The Wizards/Rincewind,17 ,Gollancz,1994,17. Interesting Times,Wd,Wizards,yellow
+17,Interesting Times,Terry Pratchett,IT,The Wizards/Rincewind,17 ,Gollancz,1994,17. Interesting Times,Wd,Wizards,brown
 18,Maskerade,Terry Pratchett,Mk,The Witches,18 ,Gollancz,1995,18. Maskerade,Wh,Witches,purple
 19,Feet of Clay,Terry Pratchett,FC,The City Watch,19 ,Gollancz,1996,19. Feet of Clay,CW,City Watch,blue
 20,Hogfather,Terry Pratchett,HF,Death,20 ,Gollancz,1996,20. Hogfather,Dh,Death,black
 21,Jingo,Terry Pratchett,J,The City Watch,21 ,Gollancz,1997,21. Jingo,CW,City Watch,blue
-22,The Last Continent,Terry Pratchett,tLC,The Wizards/Rincewind,22 ,Doubleday,1998,22. The Last Continent,Wd,Wizards,yellow
+22,The Last Continent,Terry Pratchett,tLC,The Wizards/Rincewind,22 ,Doubleday,1998,22. The Last Continent,Wd,Wizards,brown
 23,Carpe Jugulum,Terry Pratchett,CJ,The Witches,23 ,Doubleday,1998,23. Carpe Jugulum,Wh,Witches,purple
 24,The Fifth Elephant,Terry Pratchett,tFE,The City Watch,24 ,Doubleday,1999,24. The Fifth Elephant,CW,City Watch,blue
 25,The Truth,Terry Pratchett,tT,Standalone,25 ,Doubleday,2000,25. The Truth,Se,Standalone,orange
 26,Thief of Time,Terry Pratchett,ToT,Death,26 ,Doubleday,2001,26. Thief of Time,Dh,Death,black
-27,The Last Hero,Terry Pratchett,tLH,The Wizards/Rincewind,27 ,Gollancz,2001,27. The Last Hero,Wd,Wizards,yellow
+27,The Last Hero,Terry Pratchett,tLH,The Wizards/Rincewind,27 ,Gollancz,2001,27. The Last Hero,Wd,Wizards,brown
 28,The Amazing Maurice and His Educated Rodents,Terry Pratchett,tAMahER,Standalone,28 ,Doubleday,2001,28. The Amazing Maurice…,Se,Standalone,orange
 29,Night Watch,Terry Pratchett,NW,The City Watch,29 ,Doubleday,2002,29. Night Watch,CW,City Watch,blue
 30,The Wee Free Men,Terry Pratchett,tWFM,Tiffany Aching & the Nac Mac Feegles,30 ,Doubleday,2003,30. The Wee Free Men,TA,Tiffany Aching,green
 31,Monstrous Regiment,Terry Pratchett,MR,Standalone,31 ,Doubleday,2003,31. Monstrous Regiment,Se,Standalone,orange
 32,A Hat Full of Sky,Terry Pratchett,aHFoS,Tiffany Aching & the Nac Mac Feegles,32 ,Doubleday,2004,32. A Hat Full of Sky,TA,Tiffany Aching,green
-33,Going Postal,Terry Pratchett,GP,Moist Van Lipwig,33 ,Doubleday,2004,33. Going Postal,ML,Moist Van Lipwig,Red
+33,Going Postal,Terry Pratchett,GP,Moist Van Lipwig,33 ,Doubleday,2004,33. Going Postal,ML,Moist Van Lipwig,red
 34,Thud!,Terry Pratchett,T,The City Watch,34 ,Doubleday,2005,34. Thud!,CW,City Watch,blue
 35,Wintersmith,Terry Pratchett,W,Tiffany Aching & the Nac Mac Feegles,35 ,Doubleday,2006,35. Wintersmith,TA,Tiffany Aching,green
-36,Making Money,Terry Pratchett,MM,Moist Van Lipwig,36 ,Doubleday,2007,36. Making Money,ML,Moist Van Lipwig,Red
-37,Unseen Academicals,Terry Pratchett,UA,The Wizards/Rincewind,37 ,Doubleday,2009,37. Unseen Academicals,Wd,Wizards,yellow
+36,Making Money,Terry Pratchett,MM,Moist Van Lipwig,36 ,Doubleday,2007,36. Making Money,ML,Moist Van Lipwig,red
+37,Unseen Academicals,Terry Pratchett,UA,The Wizards/Rincewind,37 ,Doubleday,2009,37. Unseen Academicals,Wd,Wizards,brown
 38,I Shall Wear Midnight,Terry Pratchett,ISWM,Tiffany Aching & the Nac Mac Feegles,38 ,Doubleday,2010,38. I Shall Wear Midnight,TA,Tiffany Aching,green
 39,Snuff,Terry Pratchett,Sf,The City Watch,39 ,Doubleday,2011,39. Snuff,CW,City Watch,blue
-40,Raising Steam,Terry Pratchett,RS,Moist Van Lipwig,40 ,Doubleday,2013,40. Raising Steam,ML,Moist Van Lipwig,Red
+40,Raising Steam,Terry Pratchett,RS,Moist Van Lipwig,40 ,Doubleday,2013,40. Raising Steam,ML,Moist Van Lipwig,red
 41,The Shepherd's Crown,Terry Pratchett,tSC,Tiffany Aching & the Nac Mac Feegles,41 ,Doubleday,2015,41. The Shepherd's Crown,TA,Tiffany Aching,green

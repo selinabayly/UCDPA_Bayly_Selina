@@ -555,12 +555,10 @@ character_rating = archive_books_join_sort.groupby('Label').agg(np.mean)['Averag
 
 colour_list = extract_colours(archive_books_join_sort[['Label', 'Colour']].value_counts().index[:].tolist())
 plt.subplot(211)
-plt.xlabel("Discworld Character sub-series", fontsize=12)
-plt.ylabel("Average Rating per Book", fontsize=12)
+plt.xlabel("Discworld Character Series", fontsize=12)
+plt.ylabel("Average Rating per Series", fontsize=12)
 for y in range(len(character_rating)):
-    print(character_rating.index)
-    print(y, character_rating.index[y])
-    plt.text(y, 1, round(character_rating[y], 2), ha='center', color='grey')
+    plt.text(y, 1, round(character_rating[y], 2), ha='center', color='white')
 plt.yticks(np.arange(0, 5, 0.25))
 plt.plot([0, 7], [4.15, 4.15], color='grey', label='Average Rating')
 plt.bar(x=character_rating.index, height=character_rating, color=colour_list)
@@ -568,12 +566,10 @@ plt.legend()
 
 character_reviews = archive_books_join_sort.groupby('Label').agg(np.mean)['Total_Reviews']
 plt.subplot(212)
-plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.xlabel("Discworld Character Series", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
 for y in range(len(character_rating)):
-    print(character_reviews.index)
-    print(y, character_reviews.index[y])
-    plt.text(y, 1000, round(character_reviews[y], 2), ha='center', color='grey')
+    plt.text(y, 1500, math.floor(round(character_reviews[y], 0)), ha='center', color='white')
 plt.yticks(np.arange(0, 80000, 5000))
 plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
 plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
@@ -588,32 +584,33 @@ save_image(save_name)
 
 save_name = bar_books('Ratings & Reviews of the Discworld Books')
 
-character_rating = archive_books_join_sort.groupby('Label').agg(np.mean)['Average_Rating']
+book_rating = pd.Series(archive_books_join_sort['Average_Rating'].values,
+                        index=archive_books_join_sort['Short_Title'])
 
-colour_list = extract_colours(archive_books_join_sort[['Label', 'Colour']].value_counts().index[:].tolist())
+colour_list = archive_books_join_sort['Colour'].tolist()
 plt.subplot(211)
-plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.xlabel("Discworld Books", fontsize=12)
 plt.ylabel("Average Rating per Book", fontsize=12)
-for y in range(len(character_rating)):
-    print(character_rating.index)
-    print(y, character_rating.index[y])
-    plt.text(y, 1, round(character_rating[y], 2), ha='center', color='white')
+for y in range(len(book_rating)):
+    plt.text(y, 1, round(book_rating[y], 2), ha='center', rotation=90, color='white')
+plt.xticks(rotation=45)
 plt.yticks(np.arange(0, 5, 0.25))
-plt.plot([0, 7], [4.15, 4.15], color='grey', label='Average Rating')
-plt.bar(x=character_rating.index, height=character_rating, color=colour_list)
+plt.plot([0, 42], [4.15, 4.15], color='grey', label='Average Rating')
+plt.bar(x=book_rating.index, height=book_rating, color=colour_list)
 plt.legend()
 
-character_reviews = archive_books_join_sort.groupby('Label').agg(np.mean)['Total_Reviews']
+book_reviews = pd.Series(archive_books_join_sort['Total_Reviews'].values,
+                         index=archive_books_join_sort['Short_Title'])
+
 plt.subplot(212)
-plt.xlabel("Discworld Character sub-series", fontsize=12)
+plt.xlabel("Discworld Books", fontsize=12)
 plt.ylabel("Number of Reviews", fontsize=12)
-for y in range(len(character_rating)):
-    print(character_reviews.index)
-    print(y, character_reviews.index[y])
-    plt.text(y, 1000, round(character_reviews[y], 2), ha='center', color='white')
-plt.yticks(np.arange(0, 80000, 5000))
-plt.plot([0, 7], [59162, 59162], color='grey', label='Average Reviews')
-plt.bar(x=character_reviews.index, height=character_reviews, color=colour_list)
+for y in range(len(book_reviews)):
+    plt.text(y, 1500, round(book_reviews[y], 2), ha='center', rotation=90, color='white')
+plt.xticks(rotation=45)
+plt.yticks(np.arange(0, 230000, 10000))
+plt.plot([0, 42], [59162, 59162], color='grey', label='Average Reviews')
+plt.bar(x=book_reviews.index, height=book_reviews, color=colour_list)
 plt.legend()
 save_image(save_name)
 
@@ -660,5 +657,6 @@ print('---------------------------------------')
 #############################################################################
 # Render all the graphs
 #############################################################################
+
 plt.show()
 # end
